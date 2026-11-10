@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reyxcode | Admin Panel</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { colors: { cyber: { bg: '#0a0a0f', card: 'rgba(20, 20, 30, 0.75)', purple: '#bc13fe', cyan: '#00f3ff' } } }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0a0a0f; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(20, 20, 30, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(188, 19, 254, 0.3); }
+    </style>
+</head>
+<body class="min-h-screen p-6">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        <div class="flex justify-between items-center border-b border-cyber-purple/30 pb-4">
+            <h1 class="text-2xl font-bold text-white"><i class="fa-solid fa-user-shield text-cyber-purple mr-2"></i>Admin Control Center</h1>
+            <button onclick="firebase.auth().signOut()" class="text-xs bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg">Logout Admin</button>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl">
+            <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-users-gear text-cyber-cyan mr-2"></i>Kelola Saldo Pengguna</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left text-gray-300">
+                    <thead class="bg-black/50 text-cyber-cyan font-mono uppercase">
+                        <tr>
+                            <th class="p-3">UID / User</th>
+                            <th class="p-3">Email</th>
+                            <th class="p-3">Role</th>
+                            <th class="p-3">Saldo (IDR)</th>
+                            <th class="p-3">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUserTable" class="divide-y divide-gray-800"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDMrg2agHatw9REIXs0Pj-894UMhMB08NI",
+            authDomain: "databaseku-4e72e.firebaseapp.com",
+            databaseURL: "https://databaseku-4e72e-default-rtdb.firebaseio.com",
+            projectId: "databaseku-4e72e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                db.ref(`users/${user.uid}`).once('value', snap => {
+                    const u = snap.val();
+                    if (!u || u.role !== 'admin') {
+                        alert("Akses Ditolak! Anda bukan Admin.");
+                        window.location.href = "index.html";
+                    } else {
+                        loadUsers();
+                    }
+                });
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        function loadUsers() {
+            db.ref('users').on('value', snap => {
+                const users = snap.val() || {};
+                const tbody = document.getElementById('adminUserTable');
+                tbody.innerHTML = '';
+                Object.keys(users).forEach(uid => {
+                    const u = users[uid];
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-black/40">
+                            <td class="p-3 font-semibold text-white">${u.username || uid}</td>
+                            <td class="p-3 text-gray-400">${u.email}</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] ${u.role==='admin'?'bg-purple-500/20 text-purple-400':'bg-gray-800 text-gray-300'}">${u.role||'user'}</span></td>
+                            <td class="p-3 font-mono text-cyber-cyan">Rp ${(u.balance || 0).toLocaleString('id-ID')}</td>
+                            <td class="p-3">
+                                <button onclick="editBalance('${uid}', ${u.balance || 0})" class="bg-cyber-cyan/20 text-cyber-cyan px-2.5 py-1 rounded text-[11px] font-bold">Edit Saldo</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        function editBalance(uid, currentBal) {
+            Swal.fire({
+                title: 'Edit Saldo User',
+                input: 'number',
+                inputValue: currentBal,
+                background: '#14141e', color: '#fff', showCancelButton: true
+            }).then(res => {
+                if (res.isConfirmed && res.value !== '') {
+                    db.ref(`users/${uid}/balance`).set(parseFloat(res.value));
+                    Swal.fire({icon: 'success', title: 'Saldo Diperbarui', background: '#14141e', color: '#fff'});
+                }
+            });
+        }
+    </script>
+</body>
+</html>
