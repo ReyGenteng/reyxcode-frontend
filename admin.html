@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reyxcode | Admin Dashboard</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -15,76 +15,49 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        tailwind.config = {
-            theme: {
-                extend: { 
-                    colors: { 
-                        brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } 
-                    } 
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { colors: { brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } } } } }
     </script>
-    <style>
-        body { background-color: #0d0d12; color: #f1f5f9; font-family: 'Inter', sans-serif; }
-        .smscode-card { background-color: #16161f; border: 1px solid #2a2a35; border-radius: 1rem; }
-        .smscode-btn { background-color: #ff4d4d; color: white; transition: all 0.2s; }
-        .smscode-btn:hover { background-color: #ff3333; transform: translateY(-1px); }
-        .smscode-input { background-color: #0d0d12; border: 1px solid #2a2a35; color: white; }
-        .smscode-input:focus { border-color: #ff4d4d; outline: none; }
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #0d0d12; }
-        ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ff4d4d; }
-    </style>
+    <style>body { background-color: #0d0d12; color: #f1f5f9; font-family: 'Inter', sans-serif; }</style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col">
 
-    <!-- Topbar Admin -->
     <nav class="sticky top-0 z-50 bg-[#0d0d12]/90 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-brand-accent flex items-center justify-center text-white font-bold">R</div>
-                <span class="font-bold text-xl tracking-tight">reyx<span class="text-brand-accent">code</span> <span class="text-xs text-gray-500 font-normal ml-2">ADMIN</span></span>
+                <span class="font-bold text-xl tracking-tight">reyx<span class="text-brand-accent">code</span> <span class="text-xs bg-brand-accent text-white px-2 py-0.5 rounded ml-1">ADMIN</span></span>
             </div>
-            <button onclick="logoutAdmin()" class="text-sm text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
-            </button>
+            <button onclick="logoutAdmin()" class="text-sm text-gray-400 hover:text-white flex items-center gap-2"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold mb-2">Users Management</h1>
-            <p class="text-gray-400 text-sm">Kelola saldo dan role pengguna aplikasi.</p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full">
+        <!-- Tabs -->
+        <div class="flex gap-4 border-b border-brand-border mb-6">
+            <button onclick="switchTab('users')" id="tab-users" class="px-4 py-3 font-semibold text-brand-accent border-b-2 border-brand-accent">Manage Users</button>
+            <button onclick="switchTab('tickets')" id="tab-tickets" class="px-4 py-3 font-semibold text-gray-400 hover:text-white border-b-2 border-transparent">Support Tickets</button>
         </div>
 
-        <div class="smscode-card overflow-hidden">
-            <div class="p-6 border-b border-brand-border flex justify-between items-center bg-[#1a1a24]">
-                <h2 class="text-lg font-semibold"><i class="fa-solid fa-users text-gray-400 mr-2"></i>Daftar Pengguna</h2>
-            </div>
-            
+        <!-- USERS TAB -->
+        <div id="view-users" class="bg-[#16161f] border border-[#2a2a35] rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-gray-400 uppercase bg-[#111118] border-b border-brand-border">
+                    <thead class="text-xs text-gray-400 uppercase bg-[#111118] border-b border-[#2a2a35]">
                         <tr>
-                            <th class="px-6 py-4 font-medium">Username</th>
-                            <th class="px-6 py-4 font-medium">Email</th>
-                            <th class="px-6 py-4 font-medium">Role</th>
-                            <th class="px-6 py-4 font-medium text-right">Saldo (IDR)</th>
-                            <th class="px-6 py-4 font-medium text-center">Aksi</th>
+                            <th class="px-6 py-4">Username</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4 text-right">Saldo (IDR)</th>
+                            <th class="px-6 py-4 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUserTable" class="divide-y divide-brand-border">
-                        <!-- Loading State -->
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">Memuat data pengguna...</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="adminUserTable" class="divide-y divide-[#2a2a35]"></tbody>
                 </table>
             </div>
+        </div>
+
+        <!-- TICKETS TAB -->
+        <div id="view-tickets" class="hidden bg-[#16161f] border border-[#2a2a35] rounded-xl p-6">
+            <h2 class="text-lg font-bold mb-4">Customer Tickets</h2>
+            <div id="adminTicketContainer" class="space-y-4"></div>
         </div>
     </main>
 
@@ -102,29 +75,26 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // FIX: Cek Role secara ketat
         auth.onAuthStateChanged(user => {
             if (user) {
                 db.ref(`users/${user.uid}`).once('value', snap => {
                     const u = snap.val();
-                    if (!u || u.role !== 'admin') {
-                        // Jika login tapi bukan admin, tendang ke user.html
-                        window.location.replace("user.html");
-                    } else {
-                        // Jika benar admin, jalankan halaman
-                        loadUsers();
-                    }
+                    if (!u || u.role !== 'admin') window.location.replace("user.html");
+                    else { loadUsers(); loadTickets(); }
                 });
-            } else {
-                // Jika belum login, tendang ke login
-                window.location.replace("index.html");
-            }
+            } else window.location.replace("index.html");
         });
 
-        function logoutAdmin() {
-            auth.signOut().then(() => {
-                window.location.replace("index.html");
-            });
+        function logoutAdmin() { auth.signOut().then(() => window.location.replace("index.html")); }
+
+        function switchTab(tab) {
+            document.getElementById('view-users').classList.add('hidden');
+            document.getElementById('view-tickets').classList.add('hidden');
+            document.getElementById('tab-users').className = 'px-4 py-3 font-semibold text-gray-400 hover:text-white border-b-2 border-transparent';
+            document.getElementById('tab-tickets').className = 'px-4 py-3 font-semibold text-gray-400 hover:text-white border-b-2 border-transparent';
+            
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).className = 'px-4 py-3 font-semibold text-brand-accent border-b-2 border-brand-accent';
         }
 
         function loadUsers() {
@@ -133,31 +103,21 @@
                 const tbody = document.getElementById('adminUserTable');
                 tbody.innerHTML = '';
                 
-                const userKeys = Object.keys(users);
-                if(userKeys.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Belum ada pengguna terdaftar.</td></tr>`;
-                    return;
-                }
-
-                userKeys.forEach(uid => {
+                Object.keys(users).forEach(uid => {
                     const u = users[uid];
-                    const isAdm = u.role === 'admin';
+                    const statusBadge = u.banned ? `<span class="bg-red-500/20 text-red-500 px-2 py-1 rounded text-xs">BANNED</span>` : `<span class="bg-green-500/20 text-green-500 px-2 py-1 rounded text-xs">ACTIVE</span>`;
+                    
                     tbody.innerHTML += `
-                        <tr class="hover:bg-[#1a1a24] transition-colors">
-                            <td class="px-6 py-4 font-semibold">${u.username || 'User'}</td>
-                            <td class="px-6 py-4 text-gray-400 text-xs">${u.email}</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide ${isAdm ? 'bg-brand-accent/20 text-brand-accent' : 'bg-gray-800 text-gray-300'}">
-                                    ${(u.role||'user').toUpperCase()}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 font-mono font-medium text-right ${u.balance > 0 ? 'text-brand-success' : 'text-gray-500'}">
-                                Rp ${(u.balance || 0).toLocaleString('id-ID')}
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <button onclick="editBalance('${uid}', ${u.balance || 0})" class="text-xs bg-[#2a2a35] hover:bg-brand-accent hover:text-white text-gray-300 px-3 py-1.5 rounded-lg transition-colors">
-                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
-                                </button>
+                        <tr class="hover:bg-[#1a1a24]">
+                            <td class="px-6 py-4 font-semibold">${u.username || 'User'}<br><span class="text-xs text-gray-400">${u.email}</span></td>
+                            <td class="px-6 py-4">${statusBadge}</td>
+                            <td class="px-6 py-4 font-mono text-right">Rp ${(u.balance || 0).toLocaleString('id-ID')}</td>
+                            <td class="px-6 py-4 text-center space-x-2">
+                                <button onclick="editBalance('${uid}', ${u.balance || 0})" class="text-xs bg-[#2a2a35] hover:bg-white hover:text-black px-3 py-1.5 rounded">Edit Saldo</button>
+                                ${u.banned 
+                                    ? `<button onclick="unbanUser('${uid}')" class="text-xs bg-green-500/20 text-green-500 px-3 py-1.5 rounded">Unban</button>`
+                                    : `<button onclick="banUser('${uid}')" class="text-xs bg-brand-accent/20 text-brand-accent px-3 py-1.5 rounded">Ban User</button>`
+                                }
                             </td>
                         </tr>
                     `;
@@ -167,33 +127,44 @@
 
         function editBalance(uid, currentBal) {
             Swal.fire({
-                title: 'Update Saldo',
-                text: 'Masukkan nominal saldo baru untuk user ini',
-                input: 'number',
-                inputValue: currentBal,
-                background: '#16161f', 
-                color: '#fff', 
-                showCancelButton: true,
-                confirmButtonColor: '#ff4d4d',
-                cancelButtonColor: '#2a2a35',
-                confirmButtonText: 'Simpan',
-                customClass: {
-                    input: 'bg-[#0d0d12] border-[#2a2a35] text-white rounded-lg focus:border-[#ff4d4d]'
-                }
+                title: 'Update Saldo', input: 'number', inputValue: currentBal,
+                background: '#16161f', color: '#fff', showCancelButton: true
             }).then(res => {
-                if (res.isConfirmed && res.value !== '') {
-                    db.ref(`users/${uid}/balance`).set(parseFloat(res.value));
-                    Swal.fire({
-                        icon: 'success', 
-                        title: 'Tersimpan',
-                        text: 'Saldo berhasil diperbarui.',
-                        background: '#16161f', 
-                        color: '#fff',
-                        confirmButtonColor: '#ff4d4d'
-                    });
-                }
+                if (res.isConfirmed && res.value !== '') db.ref(`users/${uid}/balance`).set(parseFloat(res.value));
             });
         }
+
+        function banUser(uid) {
+            Swal.fire({title: 'Ban User?', text: "User tidak akan bisa login lagi.", icon: 'warning', showCancelButton: true, background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'}).then((result) => {
+                if (result.isConfirmed) db.ref(`users/${uid}/banned`).set(true);
+            });
+        }
+
+        function unbanUser(uid) { db.ref(`users/${uid}/banned`).set(null); }
+
+        function loadTickets() {
+            db.ref('tickets').on('value', snap => {
+                const tickets = snap.val() || {};
+                const container = document.getElementById('adminTicketContainer');
+                container.innerHTML = '';
+                
+                Object.keys(tickets).reverse().forEach(tid => {
+                    const t = tickets[tid];
+                    container.innerHTML += `
+                        <div class="bg-[#1a1a24] p-4 rounded-lg border border-[#2a2a35]">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-bold text-white">${t.subject} <span class="text-xs text-gray-500 font-normal ml-2">from: ${t.email}</span></h4>
+                                ${t.status === 'open' ? `<span class="bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded text-xs">OPEN</span>` : `<span class="bg-gray-500/20 text-gray-400 px-2 py-0.5 rounded text-xs">CLOSED</span>`}
+                            </div>
+                            <p class="text-sm text-gray-400 mb-3">${t.message}</p>
+                            ${t.status === 'open' ? `<button onclick="closeTicket('${tid}')" class="text-xs bg-brand-accent/20 text-brand-accent px-3 py-1.5 rounded">Mark as Resolved / Close</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function closeTicket(tid) { db.ref(`tickets/${tid}/status`).set('closed'); }
     </script>
 </body>
 </html>
