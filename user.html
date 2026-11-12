@@ -15,11 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        tailwind.config = {
-            theme: {
-                extend: { colors: { brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35', input: '#1a1a24' } } }
-            }
-        }
+        tailwind.config = { theme: { extend: { colors: { brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } } } } }
     </script>
     <style>
         body { background-color: #0d0d12; color: #f1f5f9; font-family: 'Inter', sans-serif; }
@@ -27,175 +23,175 @@
         .smscode-btn { background-color: #ff4d4d; color: white; transition: all 0.2s; }
         .smscode-btn:hover { background-color: #ff3333; transform: translateY(-1px); }
         .smscode-input { background-color: #1a1a24; border: 1px solid #2a2a35; color: white; border-radius: 0.75rem; transition: all 0.2s; }
-        .smscode-input:focus { border-color: #ff4d4d; outline: none; background-color: #22222f; }
-        .stat-box { background-color: #1a1a24; border: 1px solid #2a2a35; border-radius: 1rem; padding: 1.25rem; }
+        
+        /* Custom Dropdown Styling */
+        .custom-select-btn { @apply w-full bg-[#1a1a24] border border-[#2a2a35] text-white p-3.5 rounded-xl text-left flex justify-between items-center text-sm; }
+        .custom-select-menu { @apply absolute z-50 w-full mt-2 bg-[#1a1a24] border border-[#2a2a35] rounded-xl shadow-2xl overflow-hidden hidden flex-col max-h-64; }
+        .custom-search-box { @apply w-full bg-[#0d0d12] text-white text-sm px-4 py-3 border-b border-[#2a2a35] outline-none; }
+        .custom-option { @apply px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm border-b border-[#2a2a35]/50 last:border-0 flex items-center gap-2; }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4a4a5a; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Navbar -->
+    <!-- Navbar & Hamburger Menu -->
     <nav class="sticky top-0 z-50 bg-[#0d0d12]/90 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
+            <a href="javascript:void(0)" onclick="switchView('dashboard')" class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full bg-brand-accent flex items-center justify-center text-white font-bold">R</div>
-                <span class="font-bold text-xl tracking-tight hidden sm:block">reyxcode</span>
+                <span class="font-bold text-xl tracking-tight">reyxcode</span>
             </a>
-            <div id="userInfoNav" class="flex items-center gap-4">
-                <!-- User info / logout akan dimuat di sini -->
+            
+            <div id="userMenuArea" class="hidden relative">
+                <!-- Hamburger Button -->
+                <button onclick="toggleMenu()" class="text-white p-2 hover:bg-[#2a2a35] rounded-lg transition-colors">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <!-- Dropdown Menu -->
+                <div id="hamburgerMenu" class="hidden absolute right-0 mt-3 w-56 bg-[#16161f] border border-[#2a2a35] rounded-xl shadow-2xl overflow-hidden">
+                    <div class="px-4 py-3 border-b border-[#2a2a35]">
+                        <p class="text-xs text-gray-400">Balance</p>
+                        <p id="menuSaldo" class="font-bold text-brand-success">Rp 0</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="switchView('dashboard')" class="block px-4 py-3 text-sm hover:bg-[#2a2a35]"><i class="fa-solid fa-house w-6 text-gray-400"></i> Dashboard</a>
+                    <a href="javascript:void(0)" onclick="switchView('transactions')" class="block px-4 py-3 text-sm hover:bg-[#2a2a35]"><i class="fa-solid fa-receipt w-6 text-gray-400"></i> Transactions</a>
+                    <a href="javascript:void(0)" onclick="switchView('support')" class="block px-4 py-3 text-sm hover:bg-[#2a2a35]"><i class="fa-solid fa-headset w-6 text-gray-400"></i> Support Ticket</a>
+                    <a href="javascript:void(0)" onclick="switchView('faq')" class="block px-4 py-3 text-sm hover:bg-[#2a2a35]"><i class="fa-solid fa-circle-question w-6 text-gray-400"></i> FAQ</a>
+                    <a href="javascript:void(0)" onclick="switchView('account')" class="block px-4 py-3 text-sm border-t border-[#2a2a35] hover:bg-[#2a2a35]"><i class="fa-solid fa-user-gear w-6 text-gray-400"></i> Account Settings</a>
+                    <button onclick="auth.signOut()" class="w-full text-left block px-4 py-3 text-sm text-brand-accent hover:bg-brand-accent/10 border-t border-[#2a2a35]"><i class="fa-solid fa-right-from-bracket w-6"></i> Log out</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full">
+    <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full max-w-7xl mx-auto">
         
-        <!-- ==================== AUTH VIEW (LOGIN/REGISTER) ==================== -->
-        <div id="authView" class="w-full max-w-md mt-10">
-            <div class="text-center mb-8">
-                <div class="w-12 h-12 rounded-full bg-brand-accent mx-auto flex items-center justify-center text-white font-bold text-2xl mb-4">R</div>
-                <h2 id="authTitle" class="text-2xl font-bold tracking-tight">Sign In to Dashboard</h2>
-                <p class="text-gray-400 text-sm mt-2">Manage your virtual numbers & OTPs.</p>
-            </div>
-            
+        <!-- AUTH VIEW -->
+        <div id="view-auth" class="w-full max-w-md mt-10">
             <div class="smscode-card p-6 sm:p-8">
-                <form onsubmit="handleAuthSubmit(event)" class="space-y-5">
-                    <div id="userField" class="hidden">
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Username</label>
-                        <input type="text" id="regUser" placeholder="johndoe" class="smscode-input w-full p-3.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Email Address</label>
-                        <input type="email" id="authEmail" required placeholder="name@example.com" class="smscode-input w-full p-3.5 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Password</label>
-                        <input type="password" id="authPass" required placeholder="••••••••" class="smscode-input w-full p-3.5 text-sm">
-                    </div>
-                    <button type="submit" id="btnAuth" class="smscode-btn w-full py-3.5 rounded-xl font-bold text-sm mt-2">Continue</button>
+                <h2 id="authTitle" class="text-2xl font-bold mb-6 text-center">Sign In</h2>
+                <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                    <input type="text" id="regUser" placeholder="Username" class="smscode-input w-full p-3.5 hidden">
+                    <input type="email" id="authEmail" required placeholder="Email Address" class="smscode-input w-full p-3.5">
+                    <input type="password" id="authPass" required placeholder="Password" class="smscode-input w-full p-3.5">
+                    <button type="submit" id="btnAuth" class="smscode-btn w-full py-3.5 rounded-xl font-bold">Continue</button>
                 </form>
-                
-                <div class="mt-6 pt-6 border-t border-brand-border text-center text-sm text-gray-400">
-                    <span id="authToggleText">Don't have an account?</span> 
-                    <a href="javascript:void(0)" onclick="toggleAuthMode()" id="authToggleBtn" class="text-white font-semibold hover:text-brand-accent transition-colors">Sign Up</a>
+                <div class="mt-6 text-center text-sm text-gray-400">
+                    <a href="javascript:void(0)" onclick="toggleAuthMode()" id="authToggleBtn" class="text-white hover:text-brand-accent">Create an account instead</a>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== DASHBOARD VIEW ==================== -->
-        <div id="dashboardView" class="hidden w-full max-w-7xl mx-auto space-y-6">
-            
-            <!-- Welcome Banner -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-extrabold tracking-tight">Welcome back,</h1>
-                <h2 id="welcomeUsername" class="text-3xl font-extrabold text-brand-accent">User 👋</h2>
-            </div>
-
-            <!-- Stats Row -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="stat-box">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Balance</span>
-                        <i class="fa-solid fa-wallet text-brand-success bg-brand-success/10 p-2 rounded-lg"></i>
-                    </div>
-                    <div id="dispSaldoStat" class="text-2xl font-bold">Rp 0</div>
-                </div>
-                <div class="stat-box">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active</span>
-                        <i class="fa-solid fa-heart-pulse text-brand-accent bg-brand-accent/10 p-2 rounded-lg"></i>
-                    </div>
-                    <div class="text-2xl font-bold">0</div>
-                </div>
-                <!-- Kamu bisa tambahkan stat lain jika punya datanya -->
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
-                <!-- PANEL KIRI: ORDER BARU -->
-                <div class="lg:col-span-4">
-                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="text-brand-accent">❯</span> New Order</h3>
+        <!-- DASHBOARD VIEW (ORDER & ACTIVE ORDERS) -->
+        <div id="view-dashboard" class="hidden w-full space-y-6">
+            <h1 class="text-3xl font-extrabold">Buy Virtual Number</h1>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- FORM ORDER (CUSTOM SELECTS) -->
+                <div class="lg:col-span-5 smscode-card p-5 space-y-5">
                     
-                    <div class="smscode-card p-5 space-y-5">
-                        
-                        <!-- Pilihan Aplikasi -->
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Service</label>
-                            <div class="relative">
-                                <i class="fa-solid fa-search absolute left-3 top-3.5 text-gray-500 text-sm"></i>
-                                <select id="userServiceSelect" onchange="loadUserOperators()" class="smscode-input w-full p-3 pl-10 text-sm appearance-none cursor-pointer">
-                                    <option value="">-- Select Service --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Pilihan Negara -->
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Country</label>
-                            <div class="relative">
-                                <i class="fa-solid fa-globe absolute left-3 top-3.5 text-gray-500 text-sm"></i>
-                                <select id="userCountrySelect" onchange="loadUserOperators()" class="smscode-input w-full p-3 pl-10 text-sm appearance-none cursor-pointer">
-                                    <option value="">-- Select Country --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Pilihan Operator -->
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Operator</label>
-                            <div class="relative">
-                                <i class="fa-solid fa-tower-cell absolute left-3 top-3.5 text-gray-500 text-sm"></i>
-                                <select id="userOperatorSelect" onchange="calculateBestPrice()" class="smscode-input w-full p-3 pl-10 text-sm appearance-none cursor-pointer">
-                                    <option value="">Any Operator (Cheapest)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Info Harga -->
-                        <div id="priceInfoCard" class="hidden bg-[#1a1a24] p-4 rounded-xl border border-brand-border">
-                            <div class="flex justify-between items-center text-sm mb-2">
-                                <span class="text-gray-400">Available Stock</span>
-                                <span id="dispStock" class="font-medium bg-[#0d0d12] px-2 py-1 rounded text-xs">0</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-2 border-t border-brand-border/50">
-                                <span class="text-gray-400 text-sm">Price per SMS</span>
-                                <span id="dispFinalPrice" class="font-bold text-brand-success text-lg">Rp 0</span>
-                            </div>
-                        </div>
-
-                        <button id="btnOrderNokos" onclick="executeOrderNokos()" class="smscode-btn w-full py-3.5 rounded-xl font-bold text-sm flex justify-center items-center gap-2">
-                            Place Order <i class="fa-solid fa-arrow-right"></i>
+                    <!-- CUSTOM SELECT SERVICE -->
+                    <div class="relative">
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Service</label>
+                        <button type="button" class="custom-select-btn" onclick="toggleCustomDropdown('dropdown-service')">
+                            <span id="label-service">-- Select Service --</span> <i class="fa-solid fa-chevron-down text-xs"></i>
                         </button>
+                        <div id="dropdown-service" class="custom-select-menu">
+                            <input type="text" id="search-service" onkeyup="filterCustomDropdown('search-service', 'list-service')" placeholder="Search application..." class="custom-search-box">
+                            <ul id="list-service" class="overflow-y-auto max-h-48"></ul>
+                        </div>
                     </div>
+
+                    <!-- CUSTOM SELECT COUNTRY -->
+                    <div class="relative">
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Country</label>
+                        <button type="button" class="custom-select-btn" onclick="toggleCustomDropdown('dropdown-country')">
+                            <span id="label-country">-- Select Country --</span> <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="dropdown-country" class="custom-select-menu">
+                            <input type="text" id="search-country" onkeyup="filterCustomDropdown('search-country', 'list-country')" placeholder="Search country..." class="custom-search-box">
+                            <ul id="list-country" class="overflow-y-auto max-h-48"></ul>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM SELECT OPERATOR -->
+                    <div class="relative">
+                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Operator</label>
+                        <button type="button" class="custom-select-btn" onclick="toggleCustomDropdown('dropdown-operator')">
+                            <span id="label-operator">Any Operator (Cheapest)</span> <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="dropdown-operator" class="custom-select-menu">
+                            <ul id="list-operator" class="overflow-y-auto max-h-48">
+                                <li class="custom-option" onclick="selectOption('operator', '', 'Any Operator (Cheapest)')">Any Operator (Cheapest)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- HARGA INFO -->
+                    <div id="priceInfoCard" class="hidden bg-[#1a1a24] p-4 rounded-xl border border-[#2a2a35]">
+                        <div class="flex justify-between items-center text-sm mb-2"><span class="text-gray-400">Stock</span><span id="dispStock" class="font-medium text-white">0</span></div>
+                        <div class="flex justify-between items-center pt-2 border-t border-[#2a2a35]"><span class="text-gray-400 text-sm">Price</span><span id="dispFinalPrice" class="font-bold text-brand-success text-lg">Rp 0</span></div>
+                    </div>
+
+                    <button id="btnOrderNokos" onclick="executeOrderNokos()" class="smscode-btn w-full py-3.5 rounded-xl font-bold flex justify-center gap-2">Place Order <i class="fa-solid fa-arrow-right mt-1"></i></button>
                 </div>
 
-                <!-- PANEL KANAN: LIST ORDER -->
-                <div class="lg:col-span-8">
-                    <div class="flex justify-between items-end mb-4">
-                        <h3 class="text-lg font-bold">Your Orders</h3>
-                        <button onclick="pollActiveOrders()" class="text-xs text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-rotate-right mr-1"></i> Refresh</button>
-                    </div>
-
-                    <div class="smscode-card overflow-hidden">
-                        <!-- Filter Tabs Imitasi -->
-                        <div class="flex gap-4 p-4 border-b border-brand-border bg-[#1a1a24] overflow-x-auto">
-                            <span class="px-4 py-1.5 bg-[#2a2a35] text-white text-xs font-semibold rounded-full border border-gray-600">All Orders</span>
-                            <span class="px-4 py-1.5 text-gray-400 text-xs font-semibold rounded-full hover:bg-[#2a2a35] transition-colors cursor-pointer">Active</span>
-                        </div>
-                        
-                        <div id="userOrdersContainer" class="p-2 sm:p-4 space-y-2 max-h-[600px] overflow-y-auto">
-                            <!-- Order list will be injected here -->
-                        </div>
-                    </div>
+                <!-- ACTIVE ORDERS PANEL -->
+                <div class="lg:col-span-7">
+                    <h3 class="text-lg font-bold mb-4">Active Orders</h3>
+                    <div id="activeOrdersContainer" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
                 </div>
             </div>
-
         </div>
+
+        <!-- TRANSACTIONS VIEW -->
+        <div id="view-transactions" class="hidden w-full max-w-4xl mx-auto">
+            <h1 class="text-3xl font-extrabold mb-6">Transactions History</h1>
+            <div class="smscode-card p-6">
+                <p class="text-sm text-gray-400 mb-4">Riwayat order yang sudah selesai (Completed) atau dibatalkan (Canceled).</p>
+                <div id="historyOrdersContainer" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- SUPPORT TICKET VIEW -->
+        <div id="view-support" class="hidden w-full max-w-2xl mx-auto">
+            <h1 class="text-3xl font-extrabold mb-6">Support Center</h1>
+            <div class="smscode-card p-6 space-y-4">
+                <p class="text-sm text-gray-400">Ada kendala? Buat tiket laporan, Admin akan segera merespon.</p>
+                <input type="text" id="ticketSubject" placeholder="Subjek Laporan (ex: Saldo tidak masuk)" class="smscode-input w-full p-3.5">
+                <textarea id="ticketMessage" rows="4" placeholder="Jelaskan kendala Anda sedetail mungkin..." class="smscode-input w-full p-3.5"></textarea>
+                <button onclick="submitTicket()" class="smscode-btn px-6 py-3 rounded-xl font-bold">Kirim Tiket Laporan</button>
+            </div>
+            <div id="myTicketsContainer" class="mt-8 space-y-3"></div>
+        </div>
+
+        <!-- ACCOUNT VIEW -->
+        <div id="view-account" class="hidden w-full max-w-md mx-auto mt-10">
+            <div class="smscode-card p-6 sm:p-8">
+                <h2 class="text-2xl font-bold mb-2">Account Settings</h2>
+                <p class="text-sm text-gray-400 mb-6" id="accEmailDisplay"></p>
+                
+                <label class="block text-xs font-semibold text-gray-400 mb-2">Change Password</label>
+                <input type="password" id="newPassword" placeholder="New Password" class="smscode-input w-full p-3.5 mb-4">
+                <button onclick="changePassword()" class="smscode-btn w-full py-3.5 rounded-xl font-bold">Update Password</button>
+            </div>
+        </div>
+
+        <!-- FAQ VIEW -->
+        <div id="view-faq" class="hidden w-full max-w-3xl mx-auto mt-10">
+            <h1 class="text-3xl font-extrabold mb-6 text-center">FAQ & Bantuan</h1>
+            <div class="space-y-4">
+                <div class="smscode-card p-5"><h4 class="font-bold text-lg mb-2">Apakah saldo bisa di-refund jika SMS tidak masuk?</h4><p class="text-gray-400 text-sm">Ya! Jika status order dibatalkan (Canceled) atau waktu tunggu habis, saldo otomatis kembali 100% tanpa potongan.</p></div>
+                <div class="smscode-card p-5"><h4 class="font-bold text-lg mb-2">Bagaimana cara topup saldo?</h4><p class="text-gray-400 text-sm">Saat ini topup dilayani secara manual. Silakan buat Support Ticket atau hubungi Admin untuk instruksi pembayaran.</p></div>
+            </div>
+        </div>
+
     </main>
 
     <script>
-        // MASUKKAN URL BACKEND VERCEL/RAILWAY KAMU DI SINI
+        // MASUKKAN URL BACKEND RAILWAY KAMU
         const BACKEND_URL = "https://reyxcode-backend-production.up.railway.app"; 
         
         const firebaseConfig = {
@@ -212,13 +208,40 @@
         const db = firebase.database();
 
         let currentUserData = null;
-        let selectedProductTier = null;
         let isRegisterMode = false;
+        
+        // State Custom Selects (Supaya gak ngereset otomatis)
+        let stateService = '';
+        let stateCountry = '';
+        let stateOperator = '';
+        let selectedProductTier = null;
+        let fullDataServices = [];
+        let fullDataCountries = [];
+
+        // HIDE MENU ON CLICK OUTSIDE
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#userMenuArea')) document.getElementById('hamburgerMenu').classList.add('hidden');
+            if (!e.target.closest('.relative')) {
+                document.querySelectorAll('.custom-select-menu').forEach(el => el.classList.add('hidden'));
+            }
+        });
+
+        function toggleMenu() {
+            document.getElementById('hamburgerMenu').classList.toggle('hidden');
+        }
+
+        function switchView(viewName) {
+            const views = ['auth', 'dashboard', 'transactions', 'support', 'faq', 'account'];
+            views.forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.getElementById('hamburgerMenu').classList.add('hidden');
+            
+            if(viewName === 'support') loadMyTickets();
+        }
 
         document.addEventListener("DOMContentLoaded", () => {
             if (window.location.hash === '#register') toggleAuthMode(true);
             
-            // FIX: Pengecekan Auth & Routing Role
             auth.onAuthStateChanged(user => {
                 if (user) {
                     db.ref(`users/${user.uid}`).on('value', snap => {
@@ -226,48 +249,43 @@
                         if (currentUserData) {
                             currentUserData.uid = user.uid;
                             
-                            // JIKA DIA ADMIN, LEMPAR KE ADMIN.HTML (kecuali dia sengaja maksa buka user.html)
+                            // Cek Banned
+                            if (currentUserData.banned) {
+                                Swal.fire({icon: 'error', title: 'BANNED', text: 'Akun Anda telah diblokir oleh Admin.', background: '#16161f', color: '#fff'});
+                                auth.signOut();
+                                return;
+                            }
+                            
+                            // Cek Admin Redirect
                             if (currentUserData.role === 'admin' && !window.location.href.includes('user.html?force=true')) {
                                 window.location.replace("admin.html");
                                 return;
                             }
 
-                            // Tampilkan Dashboard
-                            document.getElementById('authView').classList.add('hidden');
-                            document.getElementById('dashboardView').classList.remove('hidden');
+                            document.getElementById('userMenuArea').classList.remove('hidden');
+                            document.getElementById('menuSaldo').innerText = `Rp ${(currentUserData.balance || 0).toLocaleString('id-ID')}`;
+                            document.getElementById('accEmailDisplay').innerText = currentUserData.email;
                             
-                            // Set UI
-                            document.getElementById('welcomeUsername').innerText = (currentUserData.username || 'User') + ' 👋';
-                            document.getElementById('dispSaldoStat').innerText = `Rp ${(currentUserData.balance || 0).toLocaleString('id-ID')}`;
-                            
-                            document.getElementById('userInfoNav').innerHTML = `
-                                <div class="hidden sm:flex items-center gap-3 mr-4">
-                                    <span class="text-sm text-gray-300">${currentUserData.email}</span>
-                                </div>
-                                <button onclick="auth.signOut()" class="text-sm text-brand-accent hover:text-white transition-colors font-medium flex items-center gap-2">
-                                    <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Log out</span>
-                                </button>
-                            `;
-                            
-                            loadUserCatalog();
+                            if(!document.getElementById('view-auth').classList.contains('hidden')) {
+                                switchView('dashboard');
+                                fetchKatalogData();
+                            }
                             pollActiveOrders();
                         }
                     });
                 } else {
-                    document.getElementById('authView').classList.remove('hidden');
-                    document.getElementById('dashboardView').classList.add('hidden');
-                    document.getElementById('userInfoNav').innerHTML = '';
+                    document.getElementById('userMenuArea').classList.add('hidden');
+                    switchView('auth');
                 }
             });
         });
 
         function toggleAuthMode(forceReg = false) {
             isRegisterMode = forceReg || !isRegisterMode;
-            document.getElementById('authTitle').innerText = isRegisterMode ? "Create an Account" : "Sign In to Dashboard";
-            document.getElementById('userField').classList.toggle('hidden', !isRegisterMode);
-            document.getElementById('btnAuth').innerText = isRegisterMode ? "Create Account" : "Continue";
-            document.getElementById('authToggleText').innerText = isRegisterMode ? "Already have an account?" : "Don't have an account?";
-            document.getElementById('authToggleBtn').innerText = isRegisterMode ? "Sign In" : "Sign Up";
+            document.getElementById('authTitle').innerText = isRegisterMode ? "Create Account" : "Sign In";
+            document.getElementById('regUser').classList.toggle('hidden', !isRegisterMode);
+            document.getElementById('btnAuth').innerText = isRegisterMode ? "Register" : "Continue";
+            document.getElementById('authToggleBtn').innerText = isRegisterMode ? "Sign In instead" : "Create an account instead";
         }
 
         async function handleAuthSubmit(e) {
@@ -275,75 +293,93 @@
             const email = document.getElementById('authEmail').value.trim();
             const pass = document.getElementById('authPass').value.trim();
             const username = document.getElementById('regUser').value.trim();
-
-            const btn = document.getElementById('btnAuth');
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
-            btn.disabled = true;
-
             try {
                 if (isRegisterMode) {
                     const cred = await auth.createUserWithEmailAndPassword(email, pass);
                     await db.ref(`users/${cred.user.uid}`).set({ username, email, role: 'user', balance: 0, created_at: new Date().toISOString() });
-                } else {
-                    await auth.signInWithEmailAndPassword(email, pass);
-                }
-            } catch (err) {
-                Swal.fire({icon: 'error', title: 'Error', text: err.message, background: '#16161f', color: '#fff'});
-            } finally {
-                btn.innerHTML = isRegisterMode ? 'Create Account' : 'Continue';
-                btn.disabled = false;
+                } else await auth.signInWithEmailAndPassword(email, pass);
+            } catch (err) { Swal.fire({icon: 'error', text: err.message, background: '#16161f', color: '#fff'}); }
+        }
+
+        /* ================= CUSTOM SELECT LOGIC ================= */
+        function toggleCustomDropdown(id) {
+            document.querySelectorAll('.custom-select-menu').forEach(el => { if(el.id !== id) el.classList.add('hidden') });
+            const menu = document.getElementById(id);
+            menu.classList.toggle('hidden');
+            if(!menu.classList.contains('hidden')) {
+                const searchInput = menu.querySelector('input');
+                if(searchInput) { searchInput.value = ''; searchInput.focus(); filterCustomDropdown(searchInput.id, menu.querySelector('ul').id); }
             }
         }
 
-        async function loadUserCatalog() {
+        function filterCustomDropdown(inputId, listId) {
+            const filter = document.getElementById(inputId).value.toLowerCase();
+            const li = document.getElementById(listId).getElementsByTagName('li');
+            for (let i = 0; i < li.length; i++) {
+                let txtValue = li[i].textContent || li[i].innerText;
+                li[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        function selectOption(type, value, label) {
+            document.getElementById(`dropdown-${type}`).classList.add('hidden');
+            document.getElementById(`label-${type}`).innerText = label;
+            
+            if (type === 'service') stateService = value;
+            if (type === 'country') stateCountry = value;
+            if (type === 'operator') stateOperator = value;
+
+            if (type === 'service' || type === 'country') fetchOperatorsData();
+            if (type === 'operator') calculateBestPrice();
+        }
+
+        async function fetchKatalogData() {
             try {
                 const resC = await fetch(`${BACKEND_URL}/api/countries`).then(r => r.json());
                 const resS = await fetch(`${BACKEND_URL}/api/services`).then(r => r.json());
                 
-                if (resC.success) {
-                    document.getElementById('userCountrySelect').innerHTML = '<option value="">-- Select Country --</option>' + 
-                        resC.data.filter(c => c.active).map(c => `<option value="${c.id}">${c.emoji || ''} ${c.name}</option>`).join('');
-                }
                 if (resS.success) {
-                    document.getElementById('userServiceSelect').innerHTML = '<option value="">-- Select Service --</option>' + 
-                        resS.data.filter(s => s.active).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                    fullDataServices = resS.data.filter(s => s.active);
+                    const htmlS = fullDataServices.map(s => `<li class="custom-option" onclick="selectOption('service', '${s.id}', '${s.name.replace(/'/g,"\\'")}')">${s.name}</li>`).join('');
+                    document.getElementById('list-service').innerHTML = htmlS;
                 }
-            } catch (e) {
-                console.error("Gagal load katalog:", e);
-            }
-        }
-
-        async function loadUserOperators() {
-            const countryId = document.getElementById('userCountrySelect').value;
-            const serviceId = document.getElementById('userServiceSelect').value;
-            if (!countryId || !serviceId) return;
-
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/operators?country_id=${countryId}&platform_id=${serviceId}`).then(r => r.json());
-                const opSel = document.getElementById('userOperatorSelect');
-                opSel.innerHTML = '<option value="">Any Operator (Cheapest)</option>';
-                if (res.success && res.data) {
-                    res.data.forEach(op => { 
-                        if (op.operator_id !== null) opSel.innerHTML += `<option value="${op.operator_id}">${op.name || op.code}</option>`; 
-                    });
+                if (resC.success) {
+                    fullDataCountries = resC.data.filter(c => c.active);
+                    const htmlC = fullDataCountries.map(c => `<li class="custom-option" onclick="selectOption('country', '${c.id}', '${(c.emoji||'') + ' ' + c.name.replace(/'/g,"\\'")}')">${c.emoji || ''} ${c.name}</li>`).join('');
+                    document.getElementById('list-country').innerHTML = htmlC;
                 }
-                calculateBestPrice();
             } catch(e) { console.error(e); }
         }
 
+        async function fetchOperatorsData() {
+            if (!stateCountry || !stateService) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/operators?country_id=${stateCountry}&platform_id=${stateService}`).then(r => r.json());
+                let htmlOp = `<li class="custom-option" onclick="selectOption('operator', '', 'Any Operator (Cheapest)')">Any Operator (Cheapest)</li>`;
+                if (res.success && res.data) {
+                    res.data.forEach(op => {
+                        if (op.operator_id !== null) {
+                            htmlOp += `<li class="custom-option" onclick="selectOption('operator', '${op.operator_id}', '${op.name || op.code}')">${op.name || op.code}</li>`;
+                        }
+                    });
+                }
+                document.getElementById('list-operator').innerHTML = htmlOp;
+                
+                // Jangan reset state operator yang dipilih user jika dia masih valid, atau auto pilih Any
+                stateOperator = ''; 
+                document.getElementById('label-operator').innerText = 'Any Operator (Cheapest)';
+                calculateBestPrice();
+            } catch(e) {}
+        }
+
         async function calculateBestPrice() {
-            const countryId = document.getElementById('userCountrySelect').value;
-            const serviceId = document.getElementById('userServiceSelect').value;
-            const operatorId = document.getElementById('userOperatorSelect').value;
             const card = document.getElementById('priceInfoCard');
-
-            if (!countryId || !serviceId) return card.classList.add('hidden');
+            if (!stateCountry || !stateService) return card.classList.add('hidden');
             card.classList.remove('hidden');
-            
-            document.getElementById('dispFinalPrice').innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm"></i>';
+            document.getElementById('dispFinalPrice').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-sm"></i>';
 
-            let url = `${BACKEND_URL}/api/price-estimate?country_id=${countryId}&platform_id=${serviceId}`;
-            if (operatorId) url += `&operator_id=${operatorId}`;
+            let url = `${BACKEND_URL}/api/price-estimate?country_id=${stateCountry}&platform_id=${stateService}`;
+            if (stateOperator) url += `&operator_id=${stateOperator}`;
 
             try {
                 const res = await fetch(url).then(r => r.json());
@@ -356,9 +392,7 @@
                     document.getElementById('dispFinalPrice').innerText = 'Out of Stock';
                     selectedProductTier = null;
                 }
-            } catch(e) {
-                document.getElementById('dispFinalPrice').innerText = 'Error';
-            }
+            } catch(e) {}
         }
 
         async function executeOrderNokos() {
@@ -370,122 +404,151 @@
 
             try {
                 const res = await fetch(`${BACKEND_URL}/api/order`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        uid: currentUserData.uid,
-                        catalog_product_id: selectedProductTier.catalog_product_id
-                    })
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: currentUserData.uid, catalog_product_id: selectedProductTier.catalog_product_id })
                 }).then(r => r.json());
 
                 if (res.success) {
-                    Swal.fire({
-                        icon: 'success', 
-                        title: 'Order Placed!', 
-                        text: `Number: ${res.data.order.phone_number}`,
-                        background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'
-                    });
+                    Swal.fire({icon: 'success', title: 'Order Placed!', text: res.data.order.phone_number, background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'});
                     pollActiveOrders();
+                    calculateBestPrice(); // Update stock visually, UI tidak reset
                 } else {
                     Swal.fire({icon: 'error', text: res.error.message, background: '#16161f', color: '#fff'});
                 }
             } catch (e) {
                 Swal.fire({icon: 'error', text: 'Server error.', background: '#16161f', color: '#fff'});
             } finally {
-                btn.innerHTML = 'Place Order <i class="fa-solid fa-arrow-right"></i>';
+                btn.innerHTML = 'Place Order <i class="fa-solid fa-arrow-right mt-1"></i>';
                 btn.disabled = false;
             }
         }
 
+        /* ================= ORDER & TRANSACTIONS ================= */
         async function pollActiveOrders() {
             if (!currentUserData) return;
             try {
                 const snap = await db.ref('orders').orderByChild('uid').equalTo(currentUserData.uid).once('value');
                 const localOrders = snap.val() || {};
-                
-                // Fetch status dari server
                 const activeRes = await fetch(`${BACKEND_URL}/api/orders/active`).then(r => r.json());
+                
                 const liveMap = new Map();
                 if (activeRes.success && activeRes.data) {
-                    // API v2 array ada di res.data
                     const ordersArr = Array.isArray(activeRes.data) ? activeRes.data : (activeRes.data.orders || []);
                     ordersArr.forEach(o => liveMap.set(o.id, o));
                 }
 
-                const container = document.getElementById('userOrdersContainer');
-                const keys = Object.keys(localOrders);
+                const actContainer = document.getElementById('activeOrdersContainer');
+                const histContainer = document.getElementById('historyOrdersContainer');
+                actContainer.innerHTML = ''; histContainer.innerHTML = '';
                 
-                if (keys.length === 0) {
-                    return container.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm">No orders found. Place an order to see it here.</div>`;
-                }
+                let activeCount = 0; let histCount = 0;
 
-                container.innerHTML = '';
-                keys.reverse().forEach(k => {
+                Object.keys(localOrders).reverse().forEach(k => {
                     const ord = localOrders[k];
                     const live = liveMap.get(ord.order_id);
-                    
                     const status = live ? live.status : ord.status;
                     const otp = live ? live.otp_code : null;
                     
-                    // Styling status ala SMSCode
+                    const isHistory = status === 'CANCELED' || status === 'COMPLETED';
+                    const targetContainer = isHistory ? histContainer : actContainer;
+                    
                     let statusHtml = '';
                     if (status === 'ACTIVE') statusHtml = `<span class="text-xs font-bold text-gray-300">ACTIVE</span>`;
                     else if (status === 'CANCELED') statusHtml = `<span class="text-xs font-bold text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded">CANCELED</span>`;
                     else if (status === 'COMPLETED') statusHtml = `<span class="text-xs font-bold text-brand-success bg-brand-success/10 px-2 py-0.5 rounded">COMPLETED</span>`;
-                    else statusHtml = `<span class="text-xs font-bold text-gray-500">${status}</span>`;
-
-                    container.innerHTML += `
-                        <div class="bg-[#1a1a24] border border-[#2a2a35] p-4 rounded-xl flex flex-col gap-3 hover:border-gray-600 transition-colors">
+                    
+                    targetContainer.innerHTML += `
+                        <div class="bg-[#1a1a24] border border-[#2a2a35] p-4 rounded-xl flex flex-col gap-3">
                             <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-gray-500 text-xs font-mono">#${ord.order_id}</span>
-                                    <span class="text-white font-semibold">${ord.phone}</span>
-                                </div>
+                                <span class="text-white font-semibold text-lg tracking-wide">${ord.phone}</span>
                                 ${statusHtml}
                             </div>
-                            
                             <div class="flex justify-between items-center text-xs text-gray-400">
-                                <span><i class="fa-solid fa-tag mr-1"></i> Rp ${ord.cost_user.toLocaleString('id-ID')}</span>
+                                <span>#${ord.order_id} • Rp ${ord.cost_user.toLocaleString('id-ID')}</span>
                             </div>
-
                             ${status === 'ACTIVE' ? `
                                 <div class="bg-[#0d0d12] p-3 rounded-lg border border-[#2a2a35] flex justify-between items-center mt-1">
-                                    <div class="font-mono text-sm ${otp ? 'text-brand-success font-bold text-lg tracking-wider' : 'text-gray-500 animate-pulse'}">
-                                        ${otp || 'Waiting for SMS...'}
-                                    </div>
+                                    <div class="font-mono text-sm ${otp ? 'text-brand-success font-bold text-lg' : 'text-gray-500 animate-pulse'}">${otp || 'Waiting for SMS...'}</div>
                                     <button onclick="cancelOrder(${ord.order_id})" class="text-xs font-semibold text-brand-accent hover:bg-brand-accent/10 px-3 py-1.5 rounded transition-colors">Cancel</button>
                                 </div>
-                            ` : ''}
+                            ` : (otp ? `<div class="bg-[#0d0d12] p-3 rounded-lg border border-[#2a2a35] text-brand-success font-mono font-bold text-lg text-center mt-1">${otp}</div>` : '')}
                         </div>
                     `;
+                    
+                    if (isHistory) histCount++; else activeCount++;
                 });
-            } catch(e) { console.error(e); }
+
+                if(activeCount === 0) actContainer.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm border border-dashed border-[#2a2a35] rounded-xl">No active orders right now.</div>`;
+                if(histCount === 0) histContainer.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm border border-dashed border-[#2a2a35] rounded-xl">No transaction history.</div>`;
+
+            } catch(e) {}
         }
 
         async function cancelOrder(id) {
-            const btn = event.target;
-            btn.innerText = '...';
-            btn.disabled = true;
-
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/order/cancel`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ order_id: id, uid: currentUserData.uid })
-                }).then(r => r.json());
-
-                if (res.success) {
-                    Swal.fire({icon: 'success', title: 'Canceled', text: 'Order canceled & refunded.', background: '#16161f', color: '#fff', timer: 1500, showConfirmButton: false});
+            Swal.fire({title: 'Cancel Order?', background: '#16161f', color: '#fff', showCancelButton: true, confirmButtonColor: '#ff4d4d'}).then(async (res) => {
+                if(res.isConfirmed) {
+                    await fetch(`${BACKEND_URL}/api/order/cancel`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: id, uid: currentUserData.uid })
+                    });
                     pollActiveOrders();
-                } else {
-                    Swal.fire({icon: 'error', text: 'Gagal cancel order.', background: '#16161f', color: '#fff'});
-                    btn.innerText = 'Cancel';
-                    btn.disabled = false;
                 }
-            } catch(e) {
-                btn.innerText = 'Cancel';
-                btn.disabled = false;
-            }
+            });
+        }
+
+        /* ================= SUPPORT TICKETS ================= */
+        function submitTicket() {
+            const subj = document.getElementById('ticketSubject').value;
+            const msg = document.getElementById('ticketMessage').value;
+            if(!subj || !msg) return Swal.fire({icon:'error', title:'Oops', text:'Lengkapi semua kolom!', background:'#16161f', color:'#fff'});
+            
+            db.ref('tickets').push({
+                uid: currentUserData.uid,
+                email: currentUserData.email,
+                subject: subj,
+                message: msg,
+                status: 'open',
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                Swal.fire({icon:'success', title:'Terkirim', text:'Tiket laporan Anda sudah masuk ke Admin.', background:'#16161f', color:'#fff', confirmButtonColor:'#ff4d4d'});
+                document.getElementById('ticketSubject').value = '';
+                document.getElementById('ticketMessage').value = '';
+                loadMyTickets();
+            });
+        }
+
+        function loadMyTickets() {
+            db.ref('tickets').orderByChild('uid').equalTo(currentUserData.uid).on('value', snap => {
+                const tkts = snap.val() || {};
+                const container = document.getElementById('myTicketsContainer');
+                container.innerHTML = '';
+                Object.keys(tkts).reverse().forEach(k => {
+                    const t = tkts[k];
+                    container.innerHTML += `
+                        <div class="bg-[#1a1a24] p-4 rounded-xl border border-[#2a2a35]">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4 class="font-bold text-white">${t.subject}</h4>
+                                ${t.status === 'open' ? `<span class="text-xs text-yellow-500">Open</span>` : `<span class="text-xs text-gray-400">Closed</span>`}
+                            </div>
+                            <p class="text-xs text-gray-400">${t.message}</p>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        /* ================= ACCOUNT ================= */
+        function changePassword() {
+            const newPass = document.getElementById('newPassword').value;
+            if(newPass.length < 6) return Swal.fire({icon:'error', text:'Password minimal 6 karakter', background:'#16161f', color:'#fff'});
+            
+            const user = auth.currentUser;
+            user.updatePassword(newPass).then(() => {
+                Swal.fire({icon:'success', title:'Success', text:'Password berhasil diubah!', background:'#16161f', color:'#fff', confirmButtonColor:'#ff4d4d'});
+                document.getElementById('newPassword').value = '';
+            }).catch(e => {
+                Swal.fire({icon:'error', text: 'Gagal! Silakan logout dan login kembali untuk mengubah password.', background:'#16161f', color:'#fff'});
+            });
         }
     </script>
 </body>
