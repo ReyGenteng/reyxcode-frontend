@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reyxcode | Admin Panel</title>
+    <title>reyxcode | Admin Dashboard</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,88 +17,147 @@
     <script>
         tailwind.config = {
             theme: {
-                extend: { colors: { cyber: { bg: '#0a0a0f', card: 'rgba(20, 20, 30, 0.75)', purple: '#bc13fe', cyan: '#00f3ff' } } }
+                extend: { 
+                    colors: { 
+                        brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } 
+                    } 
+                }
             }
         }
     </script>
     <style>
-        body { background-color: #0a0a0f; color: #e2e8f0; font-family: 'Inter', sans-serif; }
-        .glass-panel { background: rgba(20, 20, 30, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(188, 19, 254, 0.3); }
+        body { background-color: #0d0d12; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .smscode-card { background-color: #16161f; border: 1px solid #2a2a35; border-radius: 1rem; }
+        .smscode-btn { background-color: #ff4d4d; color: white; transition: all 0.2s; }
+        .smscode-btn:hover { background-color: #ff3333; transform: translateY(-1px); }
+        .smscode-input { background-color: #0d0d12; border: 1px solid #2a2a35; color: white; }
+        .smscode-input:focus { border-color: #ff4d4d; outline: none; }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0d0d12; }
+        ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff4d4d; }
     </style>
 </head>
-<body class="min-h-screen p-6">
+<body class="min-h-screen">
 
-    <div class="max-w-6xl mx-auto space-y-6">
-        <div class="flex justify-between items-center border-b border-cyber-purple/30 pb-4">
-            <h1 class="text-2xl font-bold text-white"><i class="fa-solid fa-user-shield text-cyber-purple mr-2"></i>Admin Control Center</h1>
-            <button onclick="firebase.auth().signOut()" class="text-xs bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg">Logout Admin</button>
+    <!-- Topbar Admin -->
+    <nav class="sticky top-0 z-50 bg-[#0d0d12]/90 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand-accent flex items-center justify-center text-white font-bold">R</div>
+                <span class="font-bold text-xl tracking-tight">reyx<span class="text-brand-accent">code</span> <span class="text-xs text-gray-500 font-normal ml-2">ADMIN</span></span>
+            </div>
+            <button onclick="logoutAdmin()" class="text-sm text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold mb-2">Users Management</h1>
+            <p class="text-gray-400 text-sm">Kelola saldo dan role pengguna aplikasi.</p>
         </div>
 
-        <div class="glass-panel p-6 rounded-2xl">
-            <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-users-gear text-cyber-cyan mr-2"></i>Kelola Saldo Pengguna</h2>
+        <div class="smscode-card overflow-hidden">
+            <div class="p-6 border-b border-brand-border flex justify-between items-center bg-[#1a1a24]">
+                <h2 class="text-lg font-semibold"><i class="fa-solid fa-users text-gray-400 mr-2"></i>Daftar Pengguna</h2>
+            </div>
             
             <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left text-gray-300">
-                    <thead class="bg-black/50 text-cyber-cyan font-mono uppercase">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-400 uppercase bg-[#111118] border-b border-brand-border">
                         <tr>
-                            <th class="p-3">UID / User</th>
-                            <th class="p-3">Email</th>
-                            <th class="p-3">Role</th>
-                            <th class="p-3">Saldo (IDR)</th>
-                            <th class="p-3">Aksi</th>
+                            <th class="px-6 py-4 font-medium">Username</th>
+                            <th class="px-6 py-4 font-medium">Email</th>
+                            <th class="px-6 py-4 font-medium">Role</th>
+                            <th class="px-6 py-4 font-medium text-right">Saldo (IDR)</th>
+                            <th class="px-6 py-4 font-medium text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUserTable" class="divide-y divide-gray-800"></tbody>
+                    <tbody id="adminUserTable" class="divide-y divide-brand-border">
+                        <!-- Loading State -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">Memuat data pengguna...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         const firebaseConfig = {
-    apiKey: "AIzaSyBbW70TerXmSJcPgc7Lsj4Mjd35DDrPM0I",
-    authDomain: "reystore-777b5.firebaseapp.com",
-    databaseURL: "https://reystore-777b5-default-rtdb.firebaseio.com",
-    projectId: "reystore-777b5",
-    storageBucket: "reystore-777b5.firebasestorage.app",
-    messagingSenderId: "1075601006300",
-    appId: "1:1075601006300:web:2e82a477211dfdce9c5e19"
-};
+            apiKey: "AIzaSyBbW70TerXmSJcPgc7Lsj4Mjd35DDrPM0I",
+            authDomain: "reystore-777b5.firebaseapp.com",
+            databaseURL: "https://reystore-777b5-default-rtdb.firebaseio.com",
+            projectId: "reystore-777b5",
+            storageBucket: "reystore-777b5.firebasestorage.app",
+            messagingSenderId: "1075601006300",
+            appId: "1:1075601006300:web:2e82a477211dfdce9c5e19"
+        };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
+        // FIX: Cek Role secara ketat
         auth.onAuthStateChanged(user => {
             if (user) {
                 db.ref(`users/${user.uid}`).once('value', snap => {
                     const u = snap.val();
                     if (!u || u.role !== 'admin') {
-                        alert("Akses Ditolak! Anda bukan Admin.");
-                        window.location.href = "index.html";
+                        // Jika login tapi bukan admin, tendang ke user.html
+                        window.location.replace("user.html");
                     } else {
+                        // Jika benar admin, jalankan halaman
                         loadUsers();
                     }
                 });
             } else {
-                window.location.href = "index.html";
+                // Jika belum login, tendang ke login
+                window.location.replace("index.html");
             }
         });
+
+        function logoutAdmin() {
+            auth.signOut().then(() => {
+                window.location.replace("index.html");
+            });
+        }
 
         function loadUsers() {
             db.ref('users').on('value', snap => {
                 const users = snap.val() || {};
                 const tbody = document.getElementById('adminUserTable');
                 tbody.innerHTML = '';
-                Object.keys(users).forEach(uid => {
+                
+                const userKeys = Object.keys(users);
+                if(userKeys.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Belum ada pengguna terdaftar.</td></tr>`;
+                    return;
+                }
+
+                userKeys.forEach(uid => {
                     const u = users[uid];
+                    const isAdm = u.role === 'admin';
                     tbody.innerHTML += `
-                        <tr class="hover:bg-black/40">
-                            <td class="p-3 font-semibold text-white">${u.username || uid}</td>
-                            <td class="p-3 text-gray-400">${u.email}</td>
-                            <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] ${u.role==='admin'?'bg-purple-500/20 text-purple-400':'bg-gray-800 text-gray-300'}">${u.role||'user'}</span></td>
-                            <td class="p-3 font-mono text-cyber-cyan">Rp ${(u.balance || 0).toLocaleString('id-ID')}</td>
-                            <td class="p-3">
-                                <button onclick="editBalance('${uid}', ${u.balance || 0})" class="bg-cyber-cyan/20 text-cyber-cyan px-2.5 py-1 rounded text-[11px] font-bold">Edit Saldo</button>
+                        <tr class="hover:bg-[#1a1a24] transition-colors">
+                            <td class="px-6 py-4 font-semibold">${u.username || 'User'}</td>
+                            <td class="px-6 py-4 text-gray-400 text-xs">${u.email}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide ${isAdm ? 'bg-brand-accent/20 text-brand-accent' : 'bg-gray-800 text-gray-300'}">
+                                    ${(u.role||'user').toUpperCase()}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 font-mono font-medium text-right ${u.balance > 0 ? 'text-brand-success' : 'text-gray-500'}">
+                                Rp ${(u.balance || 0).toLocaleString('id-ID')}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <button onclick="editBalance('${uid}', ${u.balance || 0})" class="text-xs bg-[#2a2a35] hover:bg-brand-accent hover:text-white text-gray-300 px-3 py-1.5 rounded-lg transition-colors">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
                             </td>
                         </tr>
                     `;
@@ -108,14 +167,30 @@
 
         function editBalance(uid, currentBal) {
             Swal.fire({
-                title: 'Edit Saldo User',
+                title: 'Update Saldo',
+                text: 'Masukkan nominal saldo baru untuk user ini',
                 input: 'number',
                 inputValue: currentBal,
-                background: '#14141e', color: '#fff', showCancelButton: true
+                background: '#16161f', 
+                color: '#fff', 
+                showCancelButton: true,
+                confirmButtonColor: '#ff4d4d',
+                cancelButtonColor: '#2a2a35',
+                confirmButtonText: 'Simpan',
+                customClass: {
+                    input: 'bg-[#0d0d12] border-[#2a2a35] text-white rounded-lg focus:border-[#ff4d4d]'
+                }
             }).then(res => {
                 if (res.isConfirmed && res.value !== '') {
                     db.ref(`users/${uid}/balance`).set(parseFloat(res.value));
-                    Swal.fire({icon: 'success', title: 'Saldo Diperbarui', background: '#14141e', color: '#fff'});
+                    Swal.fire({
+                        icon: 'success', 
+                        title: 'Tersimpan',
+                        text: 'Saldo berhasil diperbarui.',
+                        background: '#16161f', 
+                        color: '#fff',
+                        confirmButtonColor: '#ff4d4d'
+                    });
                 }
             });
         }
