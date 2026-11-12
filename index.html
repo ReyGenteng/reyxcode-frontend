@@ -12,9 +12,7 @@
     <script>
         tailwind.config = {
             theme: {
-                extend: {
-                    colors: { brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } }
-                }
+                extend: { colors: { brand: { bg: '#0d0d12', card: '#16161f', accent: '#ff4d4d', success: '#00e57a', border: '#2a2a35' } } }
             }
         }
     </script>
@@ -37,10 +35,9 @@
                 <span class="font-bold text-xl tracking-tight">reyx<span class="text-brand-accent">code</span></span>
             </div>
             <div class="flex items-center gap-3 sm:gap-4">
+                <a href="#faq" class="text-sm font-medium text-gray-400 hover:text-white transition-colors hidden sm:block mr-2">FAQ</a>
                 <a href="user.html#login" class="text-sm font-medium text-gray-300 hover:text-white px-2 py-2 transition-colors">Login</a>
-                <a href="user.html#register" class="smscode-btn text-xs sm:text-sm font-semibold px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg">
-                    Get Started Free
-                </a>
+                <a href="user.html#register" class="smscode-btn text-xs sm:text-sm font-semibold px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg">Get Started Free</a>
             </div>
         </div>
     </nav>
@@ -51,22 +48,16 @@
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#16161f] border border-brand-border text-xs font-medium text-gray-300 mb-8">
                 <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span> Virtual Numbers for SMS Verification
             </div>
-            
             <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
                 VIRTUAL NUMBERS THAT <br class="hidden sm:block"> 
                 <span class="text-brand-accent">ACTUALLY WORK.</span>
             </h1>
-            
             <p class="text-gray-400 text-base sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
                 Buy virtual numbers for OTP & verification — fast activation, clean stock, global coverage. Use it via our dashboard for WhatsApp, Telegram, Gmail, and more.
             </p>
-            
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="user.html#register" class="smscode-btn text-base font-semibold px-8 py-4 rounded-xl flex items-center justify-center gap-2">
                     Get Started Free <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <a href="#features" class="smscode-btn-outline text-base font-semibold px-8 py-4 rounded-xl flex items-center justify-center">
-                    View Features
                 </a>
             </div>
         </div>
@@ -75,24 +66,32 @@
     <!-- STATS -->
     <section class="stat-card py-12 border-b border-brand-border">
         <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-                <h3 class="text-3xl font-bold text-white mb-1">200+</h3>
-                <p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Countries</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-white mb-1">1,000+</h3>
-                <p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Platforms</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-white mb-1">99.5%</h3>
-                <p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Uptime</p>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold text-white mb-1">&lt;30s</h3>
-                <p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Avg OTP</p>
-            </div>
+            <div><h3 class="text-3xl font-bold text-white mb-1">200+</h3><p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Countries</p></div>
+            <div><h3 class="text-3xl font-bold text-white mb-1">1,000+</h3><p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Platforms</p></div>
+            <div><h3 class="text-3xl font-bold text-white mb-1">99.5%</h3><p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Uptime</p></div>
+            <div><h3 class="text-3xl font-bold text-white mb-1">&lt;30s</h3><p class="text-xs text-gray-500 font-semibold tracking-wider uppercase">Avg OTP</p></div>
         </div>
     </section>
 
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-[#0d0d12]">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <div class="bg-[#16161f] border border-[#2a2a35] rounded-xl p-5">
+                    <h4 class="font-bold text-lg mb-2">How does it work?</h4>
+                    <p class="text-gray-400 text-sm">Create an account, top up your balance, select your desired country and service, and get a virtual number instantly to receive OTP SMS.</p>
+                </div>
+                <div class="bg-[#16161f] border border-[#2a2a35] rounded-xl p-5">
+                    <h4 class="font-bold text-lg mb-2">What if I don't receive the SMS?</h4>
+                    <p class="text-gray-400 text-sm">If no SMS is received within the active period, you can cancel the order and your balance will be 100% refunded automatically.</p>
+                </div>
+                <div class="bg-[#16161f] border border-[#2a2a35] rounded-xl p-5">
+                    <h4 class="font-bold text-lg mb-2">Are the numbers safe?</h4>
+                    <p class="text-gray-400 text-sm">Yes, we provide fresh, non-VoIP numbers tailored for smooth account verifications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
