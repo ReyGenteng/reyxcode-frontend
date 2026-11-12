@@ -41,7 +41,6 @@
         .smscode-input:focus { border-color: #ff4d4d; outline: none; background-color: #22222f; }
         .stat-box { background-color: #16161f; border: 1px solid #2a2a35; border-radius: 1rem; padding: 1.25rem; }
         
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 3px; }
@@ -64,38 +63,24 @@
                     <span id="navSaldo" class="font-mono font-bold text-white">Rp 0</span>
                 </div>
 
-                <!-- Hamburger Button -->
                 <button onclick="toggleMenu()" class="text-gray-300 hover:text-white p-2.5 bg-[#16161f] border border-[#2a2a35] hover:border-gray-600 rounded-xl transition-all">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </button>
 
-                <!-- Dropdown Menu -->
                 <div id="hamburgerMenu" class="hidden absolute right-0 top-14 w-60 bg-[#16161f] border border-[#2a2a35] rounded-2xl shadow-2xl overflow-hidden z-50">
                     <div class="px-4 py-3.5 bg-[#1a1a24] border-b border-[#2a2a35]">
                         <p class="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Current Balance</p>
                         <p id="menuSaldo" class="font-mono font-bold text-lg text-brand-success mt-0.5">Rp 0</p>
                     </div>
                     <div class="py-1.5">
-                        <a href="javascript:void(0)" onclick="switchView('dashboard')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors">
-                            <i class="fa-solid fa-house w-4 text-center text-brand-accent"></i> Dashboard
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchView('transactions')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors">
-                            <i class="fa-solid fa-receipt w-4 text-center text-gray-400"></i> Transactions
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchView('support')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors">
-                            <i class="fa-solid fa-headset w-4 text-center text-gray-400"></i> Support Ticket
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchView('faq')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors">
-                            <i class="fa-solid fa-circle-question w-4 text-center text-gray-400"></i> FAQ
-                        </a>
-                        <a href="javascript:void(0)" onclick="switchView('account')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors">
-                            <i class="fa-solid fa-user-gear w-4 text-center text-gray-400"></i> Account
-                        </a>
+                        <a href="javascript:void(0)" onclick="switchView('dashboard')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors"><i class="fa-solid fa-house w-4 text-center text-brand-accent"></i> Dashboard</a>
+                        <a href="javascript:void(0)" onclick="switchView('transactions')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors"><i class="fa-solid fa-receipt w-4 text-center text-gray-400"></i> Transactions</a>
+                        <a href="javascript:void(0)" onclick="switchView('support')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors"><i class="fa-solid fa-headset w-4 text-center text-gray-400"></i> Support Ticket</a>
+                        <a href="javascript:void(0)" onclick="switchView('faq')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors"><i class="fa-solid fa-circle-question w-4 text-center text-gray-400"></i> FAQ</a>
+                        <a href="javascript:void(0)" onclick="switchView('account')" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-[#22222f] transition-colors"><i class="fa-solid fa-user-gear w-4 text-center text-gray-400"></i> Account</a>
                     </div>
                     <div class="border-t border-[#2a2a35] py-1.5">
-                        <button onclick="auth.signOut()" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-brand-accent hover:bg-brand-accent/10 font-medium transition-colors">
-                            <i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Log out
-                        </button>
+                        <button onclick="auth.signOut()" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-brand-accent hover:bg-brand-accent/10 font-medium transition-colors"><i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Log out</button>
                     </div>
                 </div>
             </div>
@@ -104,7 +89,7 @@
 
     <main class="flex-grow flex items-start justify-center p-4 sm:p-6 w-full max-w-7xl mx-auto">
         
-        <!-- ==================== AUTH VIEW (LOGIN/REGISTER) - VERSI BAGUS SEBELUMNYA ==================== -->
+        <!-- AUTH VIEW -->
         <div id="view-auth" class="w-full max-w-md mt-8 sm:mt-12">
             <div class="text-center mb-8">
                 <div class="w-14 h-14 rounded-full bg-brand-accent mx-auto flex items-center justify-center text-white font-bold text-2xl mb-4 shadow-lg shadow-brand-accent/30">R</div>
@@ -136,10 +121,8 @@
             </div>
         </div>
 
-        <!-- ==================== DASHBOARD VIEW ==================== -->
+        <!-- DASHBOARD VIEW -->
         <div id="view-dashboard" class="hidden w-full space-y-6">
-            
-            <!-- Welcome & Stats -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Welcome back, <span id="welcomeUsername" class="text-brand-accent">User 👋</span></h1>
@@ -151,33 +134,26 @@
                 <div class="stat-box">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Balance</span>
-                        <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center text-brand-success">
-                            <i class="fa-solid fa-wallet text-sm"></i>
-                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-brand-success/10 flex items-center justify-center text-brand-success"><i class="fa-solid fa-wallet text-sm"></i></div>
                     </div>
                     <div id="dispSaldoStat" class="text-xl sm:text-2xl font-bold font-mono">Rp 0</div>
                 </div>
                 <div class="stat-box">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active Orders</span>
-                        <div class="w-8 h-8 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent">
-                            <i class="fa-solid fa-bolt text-sm"></i>
-                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-brand-accent/10 flex items-center justify-center text-brand-accent"><i class="fa-solid fa-bolt text-sm"></i></div>
                     </div>
                     <div id="dispActiveCount" class="text-xl sm:text-2xl font-bold font-mono">0</div>
                 </div>
             </div>
 
-            <!-- Main Grid: New Order & Active Orders -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
-                
-                <!-- PANEL KIRI: NEW ORDER (CUSTOM SEARCH DROPDOWN) -->
+                <!-- ORDER FORM -->
                 <div class="lg:col-span-5">
                     <h3 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="text-brand-accent">❯</span> New Order</h3>
                     
                     <div class="smscode-card p-5 sm:p-6 space-y-5">
-                        
-                        <!-- 1. CUSTOM SELECT SERVICE -->
+                        <!-- 1. SERVICE -->
                         <div class="relative dropdown-container">
                             <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">1. Select Service</label>
                             <button type="button" onclick="toggleCustomDropdown('dropdown-service')" class="w-full bg-[#1a1a24] border border-[#2a2a35] hover:border-gray-600 text-white p-3.5 rounded-xl text-left flex justify-between items-center text-sm transition-colors">
@@ -195,7 +171,7 @@
                             </div>
                         </div>
 
-                        <!-- 2. CUSTOM SELECT COUNTRY -->
+                        <!-- 2. COUNTRY -->
                         <div class="relative dropdown-container">
                             <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">2. Select Country</label>
                             <button type="button" onclick="toggleCustomDropdown('dropdown-country')" class="w-full bg-[#1a1a24] border border-[#2a2a35] hover:border-gray-600 text-white p-3.5 rounded-xl text-left flex justify-between items-center text-sm transition-colors">
@@ -213,7 +189,7 @@
                             </div>
                         </div>
 
-                        <!-- 3. CUSTOM SELECT OPERATOR -->
+                        <!-- 3. OPERATOR -->
                         <div class="relative dropdown-container">
                             <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">3. Operator (Optional)</label>
                             <button type="button" onclick="toggleCustomDropdown('dropdown-operator')" class="w-full bg-[#1a1a24] border border-[#2a2a35] hover:border-gray-600 text-white p-3.5 rounded-xl text-left flex justify-between items-center text-sm transition-colors">
@@ -227,7 +203,7 @@
                             </div>
                         </div>
 
-                        <!-- INFO HARGA & STOK -->
+                        <!-- PRICE INFO -->
                         <div id="priceInfoCard" class="hidden bg-[#1a1a24] p-4 rounded-xl border border-[#2a2a35] space-y-2.5">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-gray-400">Available Stock</span>
@@ -245,7 +221,7 @@
                     </div>
                 </div>
 
-                <!-- PANEL KANAN: ACTIVE ORDERS -->
+                <!-- ACTIVE ORDERS -->
                 <div class="lg:col-span-7">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold flex items-center gap-2">Active Numbers</h3>
@@ -258,76 +234,44 @@
             </div>
         </div>
 
-        <!-- ==================== TRANSACTIONS VIEW ==================== -->
+        <!-- TRANSACTIONS VIEW -->
         <div id="view-transactions" class="hidden w-full max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold">Transactions History</h1>
-                    <p class="text-sm text-gray-400 mt-1">Completed and canceled virtual number orders.</p>
-                </div>
+                <div><h1 class="text-2xl sm:text-3xl font-extrabold">Transactions History</h1><p class="text-sm text-gray-400 mt-1">Completed and canceled orders.</p></div>
                 <button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button>
             </div>
-            <div class="smscode-card p-5 sm:p-6">
-                <div id="historyOrdersContainer" class="space-y-3"></div>
-            </div>
+            <div class="smscode-card p-5 sm:p-6"><div id="historyOrdersContainer" class="space-y-3"></div></div>
         </div>
 
-        <!-- ==================== SUPPORT TICKET VIEW ==================== -->
+        <!-- SUPPORT VIEW -->
         <div id="view-support" class="hidden w-full max-w-2xl mx-auto">
             <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold">Support Center</h1>
-                    <p class="text-sm text-gray-400 mt-1">Need help or manual topup? Submit a ticket to Admin.</p>
-                </div>
+                <div><h1 class="text-2xl sm:text-3xl font-extrabold">Support Center</h1><p class="text-sm text-gray-400 mt-1">Submit a ticket for topup or help.</p></div>
                 <button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button>
             </div>
-            
             <div class="smscode-card p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Subject</label>
-                    <input type="text" id="ticketSubject" placeholder="e.g. Deposit / Topup Saldo" class="smscode-input w-full p-3.5 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Message</label>
-                    <textarea id="ticketMessage" rows="4" placeholder="Describe your issue or deposit details..." class="smscode-input w-full p-3.5 text-sm"></textarea>
-                </div>
+                <input type="text" id="ticketSubject" placeholder="Subject" class="smscode-input w-full p-3.5 text-sm">
+                <textarea id="ticketMessage" rows="4" placeholder="Message..." class="smscode-input w-full p-3.5 text-sm"></textarea>
                 <button onclick="submitTicket()" class="smscode-btn px-6 py-3.5 rounded-xl font-bold text-sm w-full sm:w-auto">Submit Ticket</button>
             </div>
-
-            <h3 class="text-lg font-bold mt-8 mb-4">Your Tickets</h3>
-            <div id="myTicketsContainer" class="space-y-3"></div>
+            <div id="myTicketsContainer" class="mt-8 space-y-3"></div>
         </div>
 
-        <!-- ==================== ACCOUNT VIEW ==================== -->
+        <!-- ACCOUNT VIEW -->
         <div id="view-account" class="hidden w-full max-w-md mx-auto mt-6">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-extrabold">Account Settings</h1>
-                <button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button>
-            </div>
+            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-extrabold">Account Settings</h1><button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button></div>
             <div class="smscode-card p-6 sm:p-8 space-y-5">
-                <div class="p-4 bg-[#1a1a24] rounded-xl border border-[#2a2a35]">
-                    <p class="text-xs text-gray-400">Logged in as</p>
-                    <p class="font-semibold text-white mt-0.5" id="accEmailDisplay">user@email.com</p>
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">New Password</label>
-                    <input type="password" id="newPassword" placeholder="Min. 6 characters" class="smscode-input w-full p-3.5 text-sm">
-                </div>
+                <div class="p-4 bg-[#1a1a24] rounded-xl border border-[#2a2a35]"><p class="text-xs text-gray-400">Logged in as</p><p class="font-semibold text-white mt-0.5" id="accEmailDisplay">user@email.com</p></div>
+                <input type="password" id="newPassword" placeholder="New Password (min 6 chars)" class="smscode-input w-full p-3.5 text-sm">
                 <button onclick="changePassword()" class="smscode-btn w-full py-3.5 rounded-xl font-bold text-sm">Update Password</button>
             </div>
         </div>
 
-        <!-- ==================== FAQ VIEW ==================== -->
+        <!-- FAQ VIEW -->
         <div id="view-faq" class="hidden w-full max-w-3xl mx-auto mt-6">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl sm:text-3xl font-extrabold">FAQ & Help</h1>
-                <button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button>
-            </div>
+            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl sm:text-3xl font-extrabold">FAQ</h1><button onclick="switchView('dashboard')" class="text-xs bg-[#16161f] border border-[#2a2a35] px-3 py-2 rounded-lg text-gray-300 hover:text-white">← Back</button></div>
             <div class="space-y-4">
-                <div class="smscode-card p-5"><h4 class="font-bold text-base text-white mb-2">Apakah saldo bisa di-refund jika SMS tidak masuk?</h4><p class="text-gray-400 text-sm leading-relaxed">Ya! Jika nomor belum menerima SMS sama sekali, Anda bisa menekan tombol Cancel dan saldo otomatis kembali 100% ke akun Anda.</p></div>
-                <div class="smscode-card p-5"><h4 class="font-bold text-base text-white mb-2">Bagaimana cara isi saldo (Topup)?</h4><p class="text-gray-400 text-sm leading-relaxed">Buka menu garis tiga di pojok kanan atas, pilih <b>Support Ticket</b>, lalu kirim pesan permintaan topup kepada Admin.</p></div>
-                <div class="smscode-card p-5"><h4 class="font-bold text-base text-white mb-2">Kenapa stok sering berubah?</h4><p class="text-gray-400 text-sm leading-relaxed">Stok nomor terhubung secara real-time dengan server pusat dan diperebutkan oleh ribuan pengguna global setiap detiknya.</p></div>
+                <div class="smscode-card p-5"><h4 class="font-bold text-base text-white mb-2">Bagaimana cara refund?</h4><p class="text-gray-400 text-sm">Tekan tombol Cancel pada nomor aktif, saldo otomatis kembali 100%.</p></div>
             </div>
         </div>
 
@@ -351,57 +295,38 @@
 
         let currentUserData = null;
         let isRegisterMode = false;
-        
-        // State Custom Selects (Tersimpan aman meskipun stok habis)
         let stateService = '';
         let stateCountry = '';
         let stateOperator = '';
         let selectedProductTier = null;
 
-        // Tutup dropdown kalau klik di luar area
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('#userMenuArea')) {
-                document.getElementById('hamburgerMenu').classList.add('hidden');
-            }
-            if (!e.target.closest('.dropdown-container')) {
-                document.querySelectorAll('.custom-select-menu').forEach(el => el.classList.add('hidden'));
-            }
+            if (!e.target.closest('#userMenuArea')) document.getElementById('hamburgerMenu').classList.add('hidden');
+            if (!e.target.closest('.dropdown-container')) document.querySelectorAll('.custom-select-menu').forEach(el => el.classList.add('hidden'));
         });
 
-        function toggleMenu() {
-            document.getElementById('hamburgerMenu').classList.toggle('hidden');
-        }
+        function toggleMenu() { document.getElementById('hamburgerMenu').classList.toggle('hidden'); }
 
         function switchView(viewName) {
-            const views = ['auth', 'dashboard', 'transactions', 'support', 'faq', 'account'];
-            views.forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
+            ['auth', 'dashboard', 'transactions', 'support', 'faq', 'account'].forEach(v => document.getElementById(`view-${v}`).classList.add('hidden'));
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
             document.getElementById('hamburgerMenu').classList.add('hidden');
-            
             if(viewName === 'support') loadMyTickets();
         }
 
         document.addEventListener("DOMContentLoaded", () => {
             if (window.location.hash === '#register') toggleAuthMode(true);
-            
             auth.onAuthStateChanged(user => {
                 if (user) {
                     db.ref(`users/${user.uid}`).on('value', snap => {
                         currentUserData = snap.val();
                         if (currentUserData) {
                             currentUserData.uid = user.uid;
-                            
-                            if (currentUserData.banned) {
-                                Swal.fire({icon: 'error', title: 'BANNED', text: 'Akun Anda telah diblokir oleh Admin.', background: '#16161f', color: '#fff'});
-                                auth.signOut();
-                                return;
-                            }
-                            
+                            if (currentUserData.banned) { auth.signOut(); return; }
                             if (currentUserData.role === 'admin' && !window.location.href.includes('user.html?force=true')) {
                                 window.location.replace("admin.html");
                                 return;
                             }
-
                             document.getElementById('userMenuArea').classList.remove('hidden');
                             const formattedSaldo = `Rp ${(currentUserData.balance || 0).toLocaleString('id-ID')}`;
                             document.getElementById('menuSaldo').innerText = formattedSaldo;
@@ -417,17 +342,13 @@
                             pollActiveOrders();
                         }
                     });
-                } else {
-                    document.getElementById('userMenuArea').classList.add('hidden');
-                    switchView('auth');
-                }
+                } else { document.getElementById('userMenuArea').classList.add('hidden'); switchView('auth'); }
             });
         });
 
         function toggleAuthMode(forceReg = false) {
             isRegisterMode = forceReg || !isRegisterMode;
             document.getElementById('authTitle').innerText = isRegisterMode ? "Create an Account" : "Sign In to Dashboard";
-            document.getElementById('authSubtitle').innerText = isRegisterMode ? "Start renting virtual numbers in seconds." : "Manage your virtual numbers & OTPs.";
             document.getElementById('userField').classList.toggle('hidden', !isRegisterMode);
             document.getElementById('btnAuth').innerText = isRegisterMode ? "Create Account" : "Continue";
             document.getElementById('authToggleText').innerText = isRegisterMode ? "Already have an account?" : "Don't have an account?";
@@ -439,40 +360,21 @@
             const email = document.getElementById('authEmail').value.trim();
             const pass = document.getElementById('authPass').value.trim();
             const username = document.getElementById('regUser').value.trim();
-            const btn = document.getElementById('btnAuth');
-            
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
-            btn.disabled = true;
-
             try {
                 if (isRegisterMode) {
                     const cred = await auth.createUserWithEmailAndPassword(email, pass);
                     await db.ref(`users/${cred.user.uid}`).set({ username, email, role: 'user', balance: 0, created_at: new Date().toISOString() });
-                } else {
-                    await auth.signInWithEmailAndPassword(email, pass);
-                }
-            } catch (err) { 
-                Swal.fire({icon: 'error', title: 'Auth Error', text: err.message, background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'}); 
-            } finally {
-                btn.innerText = isRegisterMode ? "Create Account" : "Continue";
-                btn.disabled = false;
-            }
+                } else { await auth.signInWithEmailAndPassword(email, pass); }
+            } catch (err) { Swal.fire({icon: 'error', text: err.message, background: '#16161f', color: '#fff'}); }
         }
 
-        /* ================= CUSTOM SEARCHABLE DROPDOWN LOGIC ================= */
         function toggleCustomDropdown(id) {
-            document.querySelectorAll('.custom-select-menu').forEach(el => { 
-                if(el.id !== id) el.classList.add('hidden'); 
-            });
+            document.querySelectorAll('.custom-select-menu').forEach(el => { if(el.id !== id) el.classList.add('hidden'); });
             const menu = document.getElementById(id);
             menu.classList.toggle('hidden');
             if(!menu.classList.contains('hidden')) {
                 const searchInput = menu.querySelector('input');
-                if(searchInput) { 
-                    searchInput.value = ''; 
-                    searchInput.focus(); 
-                    filterCustomDropdown(searchInput.id, menu.querySelector('ul').id); 
-                }
+                if(searchInput) { searchInput.value = ''; searchInput.focus(); filterCustomDropdown(searchInput.id, menu.querySelector('ul').id); }
             }
         }
 
@@ -487,10 +389,7 @@
 
         function selectOption(type, value, label) {
             document.getElementById(`dropdown-${type}`).classList.add('hidden');
-            const labelEl = document.getElementById(`label-${type}`);
-            labelEl.innerText = label;
-            labelEl.classList.remove('text-gray-300');
-            labelEl.classList.add('text-white', 'font-medium');
+            document.getElementById(`label-${type}`).innerText = label;
             
             if (type === 'service') stateService = value;
             if (type === 'country') stateCountry = value;
@@ -504,26 +403,17 @@
             try {
                 const resC = await fetch(`${BACKEND_URL}/api/countries`).then(r => r.json());
                 const resS = await fetch(`${BACKEND_URL}/api/services`).then(r => r.json());
-                
                 if (resS.success) {
-                    const activeServices = resS.data.filter(s => s.active);
-                    document.getElementById('list-service').innerHTML = activeServices.map(s => `
-                        <li onclick="selectOption('service', '${s.id}', '${s.name.replace(/'/g,"\\'")}' )" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200 hover:text-white flex items-center gap-2.5 transition-colors">
-                            <span class="w-6 h-6 rounded bg-[#2a2a35] flex items-center justify-center text-xs font-bold text-brand-accent">${s.name.charAt(0).toUpperCase()}</span>
-                            <span>${s.name}</span>
-                        </li>
+                    document.getElementById('list-service').innerHTML = resS.data.filter(s => s.active).map(s => `
+                        <li onclick="selectOption('service', '${s.id}', '${s.name.replace(/'/g,"\\'")}')" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200">${s.name}</li>
                     `).join('');
                 }
                 if (resC.success) {
-                    const activeCountries = resC.data.filter(c => c.active);
-                    document.getElementById('list-country').innerHTML = activeCountries.map(c => `
-                        <li onclick="selectOption('country', '${c.id}', '${(c.emoji||'') + ' ' + c.name.replace(/'/g,"\\'")}' )" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200 hover:text-white flex items-center gap-2.5 transition-colors">
-                            <span class="text-base">${c.emoji || '🌐'}</span>
-                            <span>${c.name}</span>
-                        </li>
+                    document.getElementById('list-country').innerHTML = resC.data.filter(c => c.active).map(c => `
+                        <li onclick="selectOption('country', '${c.id}', '${(c.emoji||'') + ' ' + c.name.replace(/'/g,"\\'")}')" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200">${c.emoji || ''} ${c.name}</li>
                     `).join('');
                 }
-            } catch(e) { console.error(e); }
+            } catch(e) {}
         }
 
         async function fetchOperatorsData() {
@@ -532,14 +422,9 @@
                 const res = await fetch(`${BACKEND_URL}/api/operators?country_id=${stateCountry}&platform_id=${stateService}`).then(r => r.json());
                 let htmlOp = `<li onclick="selectOption('operator', '', 'Any Operator (Cheapest)')" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-white font-medium">Any Operator (Cheapest)</li>`;
                 if (res.success && res.data) {
-                    res.data.forEach(op => {
-                        if (op.operator_id !== null) {
-                            htmlOp += `<li onclick="selectOption('operator', '${op.operator_id}', '${op.name || op.code}')" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200 hover:text-white">${op.name || op.code}</li>`;
-                        }
-                    });
+                    res.data.forEach(op => { if (op.operator_id !== null) htmlOp += `<li onclick="selectOption('operator', '${op.operator_id}', '${op.name || op.code}')" class="px-4 py-3 hover:bg-[#2a2a35] cursor-pointer text-sm text-gray-200">${op.name || op.code}</li>`; });
                 }
                 document.getElementById('list-operator').innerHTML = htmlOp;
-                
                 stateOperator = ''; 
                 document.getElementById('label-operator').innerText = 'Any Operator (Cheapest)';
                 calculateBestPrice();
@@ -570,40 +455,41 @@
         }
 
         async function executeOrderNokos() {
-            if (!stateService || !stateCountry) {
-                return Swal.fire({icon: 'warning', title: 'Incomplete', text: 'Please select Service and Country first!', background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'});
-            }
-            if (!selectedProductTier) {
-                return Swal.fire({icon: 'warning', title: 'Out of Stock', text: 'No numbers available for this selection right now. Try another operator or try again!', background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'});
+            if (!stateService || !stateCountry || !selectedProductTier) {
+                return Swal.fire({icon: 'warning', text: 'Pilih layanan dan negara dengan benar (stok harus tersedia)!', background: '#16161f', color: '#fff'});
             }
 
             const btn = document.getElementById('btnOrderNokos');
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            btn.innerHTML = 'Processing...';
             btn.disabled = true;
 
             try {
+                // KIRIM PAYLOAD NEGARA & PLATFORM AGAR AKURAT SESUAI HARGA ESTIMASI
                 const res = await fetch(`${BACKEND_URL}/api/order`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid: currentUserData.uid, catalog_product_id: selectedProductTier.catalog_product_id })
+                    body: JSON.stringify({ 
+                        uid: currentUserData.uid, 
+                        country_id: stateCountry,
+                        platform_id: stateService,
+                        operator_id: stateOperator || null
+                    })
                 }).then(r => r.json());
 
                 if (res.success) {
-                    Swal.fire({icon: 'success', title: 'Number Rented!', text: res.data.order.phone_number, background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'});
+                    Swal.fire({icon: 'success', title: 'Berhasil Order!', text: res.data.order.phone_number, background: '#16161f', color: '#fff'});
                     pollActiveOrders();
-                    calculateBestPrice(); // Refresh stok tanpa mereset pilihan user
+                    calculateBestPrice();
                 } else {
-                    Swal.fire({icon: 'error', title: 'Order Failed', text: res.error.message, background: '#16161f', color: '#fff', confirmButtonColor: '#ff4d4d'});
-                    // Pilihan user TIDAK direset jika gagal!
+                    Swal.fire({icon: 'error', title: 'Gagal Order', text: res.error.message, background: '#16161f', color: '#fff'});
                 }
             } catch (e) {
-                Swal.fire({icon: 'error', text: 'Server connection error.', background: '#16161f', color: '#fff'});
+                Swal.fire({icon: 'error', text: 'Koneksi server error.', background: '#16161f', color: '#fff'});
             } finally {
                 btn.innerHTML = '<span>Place Order</span> <i class="fa-solid fa-arrow-right"></i>';
                 btn.disabled = false;
             }
         }
 
-        /* ================= ORDER & TRANSACTIONS ================= */
         async function pollActiveOrders() {
             if (!currentUserData) return;
             try {
@@ -613,14 +499,12 @@
                 
                 const liveMap = new Map();
                 if (activeRes.success && activeRes.data) {
-                    const ordersArr = Array.isArray(activeRes.data) ? activeRes.data : (activeRes.data.orders || []);
-                    ordersArr.forEach(o => liveMap.set(o.id, o));
+                    (Array.isArray(activeRes.data) ? activeRes.data : (activeRes.data.orders || [])).forEach(o => liveMap.set(o.id, o));
                 }
 
                 const actContainer = document.getElementById('activeOrdersContainer');
                 const histContainer = document.getElementById('historyOrdersContainer');
                 actContainer.innerHTML = ''; histContainer.innerHTML = '';
-                
                 let activeCount = 0; let histCount = 0;
 
                 Object.keys(localOrders).reverse().forEach(k => {
@@ -628,80 +512,51 @@
                     const live = liveMap.get(ord.order_id);
                     const status = live ? live.status : ord.status;
                     const otp = live ? live.otp_code : null;
-                    
                     const isHistory = status === 'CANCELED' || status === 'COMPLETED';
-                    const targetContainer = isHistory ? histContainer : actContainer;
                     
-                    let statusHtml = '';
-                    if (status === 'ACTIVE') statusHtml = `<span class="text-xs font-bold text-brand-success bg-brand-success/10 px-2.5 py-1 rounded-full flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-brand-success animate-ping"></span> ACTIVE</span>`;
-                    else if (status === 'CANCELED') statusHtml = `<span class="text-xs font-bold text-brand-accent bg-brand-accent/10 px-2.5 py-1 rounded-full">CANCELED</span>`;
-                    else if (status === 'COMPLETED') statusHtml = `<span class="text-xs font-bold text-brand-success bg-brand-success/10 px-2.5 py-1 rounded-full">COMPLETED</span>`;
-                    
-                    targetContainer.innerHTML += `
-                        <div class="bg-[#16161f] border border-[#2a2a35] p-4 sm:p-5 rounded-2xl flex flex-col gap-3 hover:border-gray-600 transition-colors">
+                    const target = isHistory ? histContainer : actContainer;
+                    target.innerHTML += `
+                        <div class="bg-[#16161f] border border-[#2a2a35] p-4 rounded-2xl flex flex-col gap-3">
                             <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="text-white font-mono font-bold text-lg tracking-wide">${ord.phone}</span>
-                                    <button onclick="navigator.clipboard.writeText('${ord.phone}'); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Number copied!', showConfirmButton:false, timer:1500, background:'#16161f', color:'#fff'})" class="text-gray-400 hover:text-white text-xs bg-[#2a2a35] p-1.5 rounded-lg" title="Copy Number"><i class="fa-regular fa-copy"></i></button>
-                                </div>
-                                ${statusHtml}
+                                <span class="text-white font-mono font-bold text-lg">${ord.phone}</span>
+                                <span class="text-xs font-bold px-2 py-1 rounded ${status==='ACTIVE'?'bg-green-500/10 text-green-400': 'bg-red-500/10 text-red-400'}">${status}</span>
                             </div>
                             <div class="flex justify-between items-center text-xs text-gray-400">
-                                <span>Order #${ord.order_id}</span>
-                                <span class="font-mono font-medium text-gray-300">Rp ${ord.cost_user.toLocaleString('id-ID')}</span>
+                                <span>#${ord.order_id}</span><span>Rp ${ord.cost_user.toLocaleString('id-ID')}</span>
                             </div>
                             ${status === 'ACTIVE' ? `
-                                <div class="bg-[#0d0d12] p-3.5 rounded-xl border border-[#2a2a35] flex justify-between items-center mt-1">
-                                    <div class="font-mono text-sm ${otp ? 'text-brand-success font-bold text-xl tracking-widest' : 'text-gray-500 animate-pulse'}">
-                                        ${otp || 'Waiting for SMS...'}
-                                    </div>
-                                    <button onclick="cancelOrder(${ord.order_id})" class="text-xs font-semibold text-brand-accent bg-brand-accent/10 hover:bg-brand-accent hover:text-white px-3.5 py-2 rounded-lg transition-colors">Cancel</button>
+                                <div class="bg-[#0d0d12] p-3 rounded-xl border border-[#2a2a35] flex justify-between items-center">
+                                    <div class="font-mono text-sm ${otp ? 'text-green-400 font-bold text-lg' : 'text-gray-500 animate-pulse'}">${otp || 'Waiting for SMS...'}</div>
+                                    <button onclick="cancelOrder(${ord.order_id})" class="text-xs text-red-400 bg-red-400/10 px-3 py-1.5 rounded-lg">Cancel</button>
                                 </div>
-                            ` : (otp ? `<div class="bg-[#0d0d12] p-3 rounded-xl border border-[#2a2a35] text-brand-success font-mono font-bold text-lg text-center tracking-widest mt-1">${otp}</div>` : '')}
+                            ` : (otp ? `<div class="bg-[#0d0d12] p-3 rounded-xl text-green-400 font-mono font-bold text-center">${otp}</div>` : '')}
                         </div>
                     `;
-                    
                     if (isHistory) histCount++; else activeCount++;
                 });
 
                 document.getElementById('dispActiveCount').innerText = activeCount;
-
-                if(activeCount === 0) actContainer.innerHTML = `<div class="smscode-card p-10 text-center text-gray-500 text-sm">No active numbers right now. Place an order on the left!</div>`;
-                if(histCount === 0) histContainer.innerHTML = `<div class="p-10 text-center text-gray-500 text-sm">No transaction history yet.</div>`;
-
+                if(activeCount === 0) actContainer.innerHTML = `<div class="smscode-card p-10 text-center text-gray-500 text-sm">Belum ada orderan aktif.</div>`;
+                if(histCount === 0) histContainer.innerHTML = `<div class="p-10 text-center text-gray-500 text-sm">Belum ada riwayat transaksi.</div>`;
             } catch(e) {}
         }
 
         async function cancelOrder(id) {
-            Swal.fire({title: 'Cancel Order?', text: 'Your balance will be refunded immediately.', icon: 'warning', background: '#16161f', color: '#fff', showCancelButton: true, confirmButtonColor: '#ff4d4d', cancelButtonColor: '#2a2a35'}).then(async (res) => {
+            Swal.fire({title: 'Batalkan Order?', text: 'Saldo dikembalikan 100%.', background: '#16161f', color: '#fff', showCancelButton: true, confirmButtonColor: '#ff4d4d'}).then(async (res) => {
                 if(res.isConfirmed) {
-                    await fetch(`${BACKEND_URL}/api/order/cancel`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ order_id: id, uid: currentUserData.uid })
-                    });
-                    Swal.fire({toast:true, position:'top-end', icon:'success', title:'Order canceled & refunded!', showConfirmButton:false, timer:2000, background:'#16161f', color:'#fff'});
+                    await fetch(`${BACKEND_URL}/api/order/cancel`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: id, uid: currentUserData.uid }) });
                     pollActiveOrders();
                 }
             });
         }
 
-        /* ================= SUPPORT TICKETS ================= */
         function submitTicket() {
             const subj = document.getElementById('ticketSubject').value.trim();
             const msg = document.getElementById('ticketMessage').value.trim();
-            if(!subj || !msg) return Swal.fire({icon:'error', title:'Incomplete', text:'Please fill out both Subject and Message!', background:'#16161f', color:'#fff', confirmButtonColor: '#ff4d4d'});
-            
-            db.ref('tickets').push({
-                uid: currentUserData.uid,
-                email: currentUserData.email,
-                subject: subj,
-                message: msg,
-                status: 'open',
-                timestamp: new Date().toISOString()
-            }).then(() => {
-                Swal.fire({icon:'success', title:'Ticket Sent!', text:'Admin will review your message shortly.', background:'#16161f', color:'#fff', confirmButtonColor:'#ff4d4d'});
-                document.getElementById('ticketSubject').value = '';
-                document.getElementById('ticketMessage').value = '';
+            if(!subj || !msg) return Swal.fire({icon:'error', text:'Isi subjek dan pesan!', background:'#16161f', color:'#fff'});
+            db.ref('tickets').push({ uid: currentUserData.uid, email: currentUserData.email, subject: subj, message: msg, status: 'open', timestamp: new Date().toISOString() }).then(() => {
+                Swal.fire({icon:'success', text:'Tiket terkirim!', background:'#16161f', color:'#fff'});
+                document.getElementById('ticketSubject').value = ''; document.getElementById('ticketMessage').value = '';
                 loadMyTickets();
             });
         }
@@ -711,38 +566,20 @@
                 const tkts = snap.val() || {};
                 const container = document.getElementById('myTicketsContainer');
                 container.innerHTML = '';
-                const keys = Object.keys(tkts);
-                if(keys.length === 0) {
-                    container.innerHTML = `<div class="text-sm text-gray-500 text-center p-6 smscode-card">You haven't submitted any tickets yet.</div>`;
-                    return;
-                }
-                keys.reverse().forEach(k => {
+                Object.keys(tkts).reverse().forEach(k => {
                     const t = tkts[k];
-                    container.innerHTML += `
-                        <div class="smscode-card p-4">
-                            <div class="flex justify-between items-center mb-1.5">
-                                <h4 class="font-bold text-white text-sm">${t.subject}</h4>
-                                ${t.status === 'open' ? `<span class="text-[11px] font-semibold bg-yellow-500/10 text-yellow-500 px-2.5 py-0.5 rounded-full">OPEN</span>` : `<span class="text-[11px] font-semibold bg-gray-500/10 text-gray-400 px-2.5 py-0.5 rounded-full">CLOSED</span>`}
-                            </div>
-                            <p class="text-xs text-gray-400 leading-relaxed">${t.message}</p>
-                        </div>
-                    `;
+                    container.innerHTML += `<div class="smscode-card p-4"><h4 class="font-bold text-white text-sm">${t.subject} (${t.status})</h4><p class="text-xs text-gray-400 mt-1">${t.message}</p></div>`;
                 });
             });
         }
 
-        /* ================= ACCOUNT ================= */
         function changePassword() {
             const newPass = document.getElementById('newPassword').value;
-            if(newPass.length < 6) return Swal.fire({icon:'error', text:'Password must be at least 6 characters!', background:'#16161f', color:'#fff', confirmButtonColor: '#ff4d4d'});
-            
-            const user = auth.currentUser;
-            user.updatePassword(newPass).then(() => {
-                Swal.fire({icon:'success', title:'Updated!', text:'Your password has been changed.', background:'#16161f', color:'#fff', confirmButtonColor:'#ff4d4d'});
+            if(newPass.length < 6) return Swal.fire({icon:'error', text:'Minimal 6 karakter!', background:'#16161f', color:'#fff'});
+            auth.currentUser.updatePassword(newPass).then(() => {
+                Swal.fire({icon:'success', text:'Password diubah!', background:'#16161f', color:'#fff'});
                 document.getElementById('newPassword').value = '';
-            }).catch(e => {
-                Swal.fire({icon:'error', title:'Re-login Required', text: 'For security, please log out and log back in before changing your password.', background:'#16161f', color:'#fff', confirmButtonColor: '#ff4d4d'});
-            });
+            }).catch(() => Swal.fire({icon:'error', text:'Silakan re-login dulu sebelum ganti password.', background:'#16161f', color:'#fff'}));
         }
     </script>
 </body>
