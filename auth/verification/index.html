@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reyxcode | Security Verification</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { 
+                    colors: { 
+                        brand: { 
+                            bg: '#0d0d12', 
+                            card: '#16161f', 
+                            accent: '#ff4d4d', 
+                            success: '#00e57a', 
+                            border: '#2a2a35', 
+                            input: '#1a1a24' 
+                        } 
+                    } 
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0d0d12; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .smscode-card { background-color: #16161f; border: 1px solid #2a2a35; border-radius: 1rem; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+        .smscode-btn { background-color: #ff4d4d; color: white; transition: all 0.2s; }
+        .smscode-btn:hover { background-color: #ff3333; transform: translateY(-1px); box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3); }
+        .smscode-input { background-color: #1a1a24; border: 1px solid #2a2a35; color: white; border-radius: 0.75rem; transition: all 0.2s; }
+        .smscode-input:focus { border-color: #ff4d4d; outline: none; background-color: #22222f; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+        <!-- Brand Header -->
+        <div class="flex items-center justify-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-full bg-brand-accent flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-accent/25">R</div>
+            <span class="font-bold text-2xl tracking-tight">reyx<span class="text-brand-accent">code</span></span>
+        </div>
+
+        <div class="smscode-card p-6 sm:p-8 text-center">
+            
+            <!-- STATE 1: LOADING -->
+            <div id="state-loading" class="py-6 space-y-4">
+                <i class="fa-solid fa-shield-halved fa-beat text-4xl text-brand-accent"></i>
+                <h2 class="text-xl font-bold text-white">Memvalidasi Kode Rahasia...</h2>
+                <p class="text-sm text-gray-400">Memeriksa keaslian token sesi verifikasi kamu.</p>
+            </div>
+
+            <!-- STATE 2: SUCCESS -->
+            <div id="state-success" class="hidden py-4 space-y-5">
+                <div class="w-16 h-16 rounded-full bg-brand-success/10 border border-brand-success/30 mx-auto flex items-center justify-center text-brand-success text-3xl">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div>
+                    <h2 id="success-title" class="text-2xl font-bold text-white">Email Terverifikasi!</h2>
+                    <p id="success-desc" class="text-sm text-gray-400 mt-2 leading-relaxed">Kode sesi valid. Akun kamu sudah aktif dan sekarang kamu bisa login.</p>
+                </div>
+                <div id="session-badge" class="bg-[#0d0d12] border border-[#2a2a35] rounded-lg px-3 py-2 text-[11px] font-mono text-gray-400"></div>
+                <button onclick="goToLogin()" class="smscode-btn w-full py-3.5 rounded-xl font-bold text-sm mt-2">
+                    Login Sekarang <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                </button>
+            </div>
+
+            <!-- STATE 3: RESET PASSWORD FORM -->
+            <div id="state-reset" class="hidden text-left space-y-5">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-white">Buat Password Baru</h2>
+                    <p id="reset-email-info" class="text-xs text-gray-400 mt-1.5"></p>
+                </div>
+                <form onsubmit="submitNewPassword(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Password Baru</label>
+                        <input type="password" id="newPassInput" required minlength="6" placeholder="Minimal 6 karakter" class="smscode-input w-full p-3.5 text-sm">
+                    </div>
+                    <button type="submit" id="btnResetPass" class="smscode-btn w-full py-3.5 rounded-xl font-bold text-sm">Simpan Password</button>
+                </form>
+            </div>
+
+            <!-- STATE 4: ERROR / INVALID SECRET CODE -->
+            <div id="state-error" class="hidden py-4 space-y-5">
+                <div class="w-16 h-16 rounded-full bg-brand-accent/10 border border-brand-accent/30 mx-auto flex items-center justify-center text-brand-accent text-3xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Kode Rahasia Tidak Valid</h2>
+                    <p id="error-desc" class="text-sm text-gray-400 mt-2 leading-relaxed">Link verifikasi tidak memiliki kode sesi yang sah, sudah kedaluwarsa, atau sudah pernah digunakan.</p>
+                </div>
+                <button onclick="goToLogin()" class="w-full py-3.5 rounded-xl font-semibold text-sm bg-[#1a1a24] border border-[#2a2a35] hover:border-gray-500 text-white transition-colors">
+                    Kembali ke Halaman Login
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbW70TerXmSJcPgc7Lsj4Mjd35DDrPM0I",
+            authDomain: "reystore-777b5.firebaseapp.com",
+            databaseURL: "https://reystore-777b5-default-rtdb.firebaseio.com",
+            projectId: "reystore-777b5",
+            storageBucket: "reystore-777b5.firebasestorage.app",
+            messagingSenderId: "1075601006300",
+            appId: "1:1075601006300:web:2e82a477211dfdce9c5e19"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode');
+        const oobCode = params.get('oobCode');
+
+        function goToLogin() {
+            const path = window.location.pathname;
+            if (path.includes('/auth/verification')) {
+                window.location.href = path.split('/auth/verification')[0] + '/user.html';
+            } else {
+                window.location.href = 'user.html';
+            }
+        }
+
+        function showState(stateName) {
+            ['loading', 'success', 'reset', 'error'].forEach(s => {
+                document.getElementById(`state-${s}`).classList.add('hidden');
+            });
+            document.getElementById(`state-${stateName}`).classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!mode || !oobCode || oobCode.length < 10) {
+                showState('error');
+                return;
+            }
+
+            try {
+                if (mode === 'verifyEmail') {
+                    await auth.applyActionCode(oobCode);
+                    const shortToken = oobCode.substring(0, 6) + '***' + oobCode.slice(-4);
+                    document.getElementById('session-badge').innerText = `Session Verified: ${shortToken}`;
+                    document.getElementById('success-title').innerText = "Email Terverifikasi!";
+                    document.getElementById('success-desc').innerText = "Kode rahasia sesi valid dan telah hangus dipakai. Silakan login ke akun kamu.";
+                    showState('success');
+                } 
+                else if (mode === 'resetPassword') {
+                    const email = await auth.verifyPasswordResetCode(oobCode);
+                    document.getElementById('reset-email-info').innerText = `Reset password untuk: ${email}`;
+                    showState('reset');
+                } 
+                else if (mode === 'recoverEmail') {
+                    await auth.applyActionCode(oobCode);
+                    document.getElementById('session-badge').classList.add('hidden');
+                    document.getElementById('success-title').innerText = "Email Dipulihkan!";
+                    document.getElementById('success-desc').innerText = "Alamat email akun kamu berhasil dikembalikan.";
+                    showState('success');
+                } 
+                else {
+                    showState('error');
+                }
+            } catch (err) {
+                document.getElementById('error-desc').innerText = "Kode rahasia sesi sudah kedaluwarsa atau sudah pernah dipakai sebelumnya.";
+                showState('error');
+            }
+        });
+
+        async function submitNewPassword(e) {
+            e.preventDefault();
+            const newPass = document.getElementById('newPassInput').value;
+            const btn = document.getElementById('btnResetPass');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
+            btn.disabled = true;
+
+            try {
+                await auth.confirmPasswordReset(oobCode, newPass);
+                document.getElementById('session-badge').classList.add('hidden');
+                document.getElementById('success-title').innerText = "Password Diperbarui!";
+                document.getElementById('success-desc').innerText = "Password baru kamu sudah tersimpan. Silakan login kembali.";
+                showState('success');
+            } catch (err) {
+                document.getElementById('error-desc').innerText = err.message;
+                showState('error');
+            }
+        }
+    </script>
+</body>
+</html>
